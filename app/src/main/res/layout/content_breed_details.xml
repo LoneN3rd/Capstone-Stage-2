@@ -30,6 +30,12 @@
                 app:cardCornerRadius="15dp"
                 android:backgroundTint="@android:color/darker_gray">
 
+                <ImageView
+                    android:id="@+id/country_code_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/breed_image" />
+
                 <TextView
                     android:id="@+id/origin"
                     android:layout_width="wrap_content"

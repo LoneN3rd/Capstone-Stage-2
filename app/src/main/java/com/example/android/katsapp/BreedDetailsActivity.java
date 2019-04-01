@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -20,6 +22,7 @@ import com.example.android.katsapp.model.Breeds;
 import com.example.android.katsapp.provider.BreedsContract.BreedsEntry;
 import com.example.android.katsapp.provider.BreedsDbHelper;
 import com.example.android.katsapp.utils.JsonUtils;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 
@@ -96,6 +99,9 @@ public class BreedDetailsActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
+    @BindView(R.id.country_code_image)
+    ImageView country_code_image;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -170,13 +176,19 @@ public class BreedDetailsActivity extends AppCompatActivity {
 
                 breedId = breedDetails[clickedBreedPosition].getId();
 
+                // https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.1/flags/1x1/us.svg
+
+                String country_code_image_url = "https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.1/flags/1x1/"+country_code+".svg";
+
+                Picasso.with(this)
+                        .load(country_code_image_url)
+                        .fit()
+                        .into(country_code_image);
             }
 
             setTitle(breedName);
 
             origin.setText(breedOrigin);
-
-            // https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.1/flags/1x1/us.svg
 
             if (hypoallergenic != 0){
                 tv_hypoallergenic.setText(R.string.hypoallergenic);

@@ -72,7 +72,7 @@ public class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
         RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.cats_widget_list_item);
 
         rv.setTextViewText(R.id.widget_title, mCursor.getString(2));
-        rv.setTextViewText(R.id.temperament, mCursor.getString(6));
+        rv.setTextViewText(R.id.temperament, mCursor.getString(7));
 
         Intent fillInIntent = new Intent();
 
