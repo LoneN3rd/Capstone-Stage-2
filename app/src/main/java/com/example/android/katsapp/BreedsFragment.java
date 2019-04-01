@@ -19,10 +19,12 @@ import android.view.ViewGroup;
 
 import com.example.android.katsapp.Adapters.BreedsAdapter;
 import com.example.android.katsapp.model.Breeds;
+import com.example.android.katsapp.model.Images;
 import com.example.android.katsapp.provider.BreedsContract.BreedsEntry;
 import com.example.android.katsapp.utils.JsonUtils;
 import com.example.android.katsapp.utils.UrlUtils;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.concurrent.ExecutionException;
 
@@ -118,6 +120,8 @@ public class BreedsFragment extends Fragment implements BreedsAdapter.BreedAdapt
     @Override
     public void onBreedClicked(int position, String breedId) {
         mCallback.onBreedClick(position, breedsQueryResponse, breedId, loadingFromFav);
+
+        Log.i(LOG_TAG, "breedIdbreedId:"+breedId);
     }
 
     public interface OnBreedClickListener{
@@ -168,18 +172,11 @@ public class BreedsFragment extends Fragment implements BreedsAdapter.BreedAdapt
         protected Breeds[] doInBackground(String... strings) {
 
             URL theBreedsUrl = UrlUtils.buildUrl();
-            URL breedImageUrl = UrlUtils.buildBreedImageUrl("abys");
 
             try {
 
                 breedsQueryResponse = UrlUtils.getResponseFromHttp(theBreedsUrl);
                 cat_breeds = JsonUtils.parseBreedsJson(breedsQueryResponse);
-
-                String breedImageQueryResponse = UrlUtils.getResponseFromHttp(breedImageUrl);
-
-                Log.i(LOG_TAG, "breedImageUrl,,"+breedImageUrl);
-                Log.i(LOG_TAG, "breedImageQueryResponse,,"+breedImageQueryResponse);
-
 
             } catch (Exception e){
                 e.printStackTrace();
@@ -200,7 +197,4 @@ public class BreedsFragment extends Fragment implements BreedsAdapter.BreedAdapt
         }
     }
 
-    // Get Breed Images
-    //@SuppressLint("StaticFieldLeak")
-    //private class GetBreedImageTask extends AsyncTask<String, Void, Breeds[]> {}
 }

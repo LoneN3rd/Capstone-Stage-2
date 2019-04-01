@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.Image;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -19,12 +20,17 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.android.katsapp.model.Breeds;
+import com.example.android.katsapp.model.Images;
 import com.example.android.katsapp.provider.BreedsContract.BreedsEntry;
 import com.example.android.katsapp.provider.BreedsDbHelper;
 import com.example.android.katsapp.utils.JsonUtils;
+import com.example.android.katsapp.utils.UrlUtils;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
+
+import java.io.IOException;
+import java.net.URL;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -185,6 +191,8 @@ public class BreedDetailsActivity extends AppCompatActivity {
                         .fit()
                         .into(country_code_image);
             }
+
+            new GetBreedImageTask().execute();
 
             setTitle(breedName);
 
@@ -376,6 +384,41 @@ public class BreedDetailsActivity extends AppCompatActivity {
             logInfo(str.substring(4000));
         } else {
             Log.i(LOG_TAG, str);
+        }
+    }
+
+    // Get Breed Images
+    @SuppressLint("StaticFieldLeak")
+    private class GetBreedImageTask extends AsyncTask<String, Void, Images[]> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Images[] doInBackground(String... strings) {
+
+            URL breedImageUrl = UrlUtils.buildBreedImageUrl(breedId);
+
+            String breedImageQueryResponse = null;
+            try {
+                breedImageQueryResponse = UrlUtils.getResponseFromHttp(breedImageUrl);
+
+                Log.i(LOG_TAG, "breedImageUrl,,"+breedImageUrl);
+                Log.i(LOG_TAG, "breedImageQueryResponse,,"+breedImageQueryResponse);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return new Images[0];
+        }
+
+
+        @Override
+        protected void onPostExecute(Images[] images) {
+            super.onPostExecute(images);
         }
     }
 
