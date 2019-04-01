@@ -3,24 +3,23 @@ package com.example.android.katsapp.Adapters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.android.katsapp.R;
-import com.example.android.katsapp.model.CategoryImages;
+import com.example.android.katsapp.model.Images;
 import com.squareup.picasso.Picasso;
 
 public class CategoryDetailsAdapter extends RecyclerView.Adapter<CategoryDetailsAdapter.ViewHolder> {
 
-    private CategoryImages[] categoryImages;
+    private Images[] categoryImages;
     private Context mContext;
 
     private static final String LOG_TAG = CategoryDetailsAdapter.class.getSimpleName();
 
-    public CategoryDetailsAdapter(Context context, CategoryImages[] categoryImages){
+    public CategoryDetailsAdapter(Context context, Images[] categoryImages){
         this.mContext = context;
         this.categoryImages = categoryImages;
     }

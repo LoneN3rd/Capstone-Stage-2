@@ -1,6 +1,6 @@
 package com.example.android.katsapp.model;
 
-public class CategoryImages {
+public class Images {
 
     private String image_url;
 

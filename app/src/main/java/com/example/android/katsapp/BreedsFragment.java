@@ -199,4 +199,8 @@ public class BreedsFragment extends Fragment implements BreedsAdapter.BreedAdapt
             }
         }
     }
+
+    // Get Breed Images
+    //@SuppressLint("StaticFieldLeak")
+    //private class GetBreedImageTask extends AsyncTask<String, Void, Breeds[]> {}
 }

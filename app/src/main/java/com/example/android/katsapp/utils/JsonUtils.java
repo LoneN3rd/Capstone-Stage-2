@@ -2,11 +2,10 @@ package com.example.android.katsapp.utils;
 
 import com.example.android.katsapp.model.Breeds;
 import com.example.android.katsapp.model.Categories;
-import com.example.android.katsapp.model.CategoryImages;
+import com.example.android.katsapp.model.Images;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 public class JsonUtils {
 
@@ -88,14 +87,14 @@ public class JsonUtils {
     }
 
     // Parse Category Images
-    public static CategoryImages[] parseCategoryImagesJson(String jsonAllCategoryImagesData) throws JSONException {
+    public static Images[] parseCategoryImagesJson(String jsonAllCategoryImagesData) throws JSONException {
 
         final JSONArray jsonArray = new JSONArray(jsonAllCategoryImagesData);
 
-        CategoryImages[] theResult = new CategoryImages[jsonArray.length()];
+        Images[] theResult = new Images[jsonArray.length()];
 
         for (int i=0; i < jsonArray.length(); i++){
-            CategoryImages categoryImages = new CategoryImages();
+            Images categoryImages = new Images();
 
             categoryImages.setImageUrl(jsonArray.getJSONObject(i).optString(CATEGORY_IMAGE_URL));
 

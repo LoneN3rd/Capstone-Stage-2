@@ -13,17 +13,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.example.android.katsapp.Adapters.CategoriesAdapter;
 import com.example.android.katsapp.Adapters.CategoryDetailsAdapter;
-import com.example.android.katsapp.model.Breeds;
-import com.example.android.katsapp.model.Categories;
-import com.example.android.katsapp.model.CategoryImages;
+import com.example.android.katsapp.model.Images;
 import com.example.android.katsapp.utils.JsonUtils;
 import com.example.android.katsapp.utils.UrlUtils;
 
-import org.json.JSONException;
-
-import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 
@@ -34,7 +28,7 @@ public class CategoryDetailsActivity extends AppCompatActivity {
 
     int categoryId;
     String categoryName, imageQueryResponse;
-    CategoryImages[] categoryImages;
+    Images[] categoryImages;
 
     private static final String LOG_TAG = CategoryDetailsActivity.class.getSimpleName();
 
@@ -81,14 +75,14 @@ public class CategoryDetailsActivity extends AppCompatActivity {
 
     // Get Breed Images AsyncTask
     @SuppressLint("StaticFieldLeak")
-    private class GetCategoryImagesTask extends AsyncTask<String, Void, CategoryImages[]> {
+    private class GetCategoryImagesTask extends AsyncTask<String, Void, Images[]> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
         }
 
         @Override
-        protected CategoryImages[] doInBackground(String... strings) {
+        protected Images[] doInBackground(String... strings) {
 
             URL categoryImagesUrl = UrlUtils.buildCategoryImagesUrl(categoryId);
 
@@ -109,7 +103,7 @@ public class CategoryDetailsActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(CategoryImages[] images) {
+        protected void onPostExecute(Images[] images) {
             new GetCategoryImagesTask().cancel(true);
 
             if (images != null){
