@@ -87,9 +87,9 @@ public class JsonUtils {
     }
 
     // Parse Category Images
-    public static Images[] parseCategoryImagesJson(String jsonAllCategoryImagesData) throws JSONException {
+    public static Images[] parseImagesJson(String jsonAllImagesData) throws JSONException {
 
-        final JSONArray jsonArray = new JSONArray(jsonAllCategoryImagesData);
+        final JSONArray jsonArray = new JSONArray(jsonAllImagesData);
 
         Images[] theResult = new Images[jsonArray.length()];
 

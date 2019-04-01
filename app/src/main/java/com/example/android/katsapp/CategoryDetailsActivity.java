@@ -88,16 +88,11 @@ public class CategoryDetailsActivity extends AppCompatActivity {
 
             try {
                 imageQueryResponse = UrlUtils.getResponseFromHttp(categoryImagesUrl);
-                categoryImages = JsonUtils.parseCategoryImagesJson(imageQueryResponse);
+                categoryImages = JsonUtils.parseImagesJson(imageQueryResponse);
 
             } catch (Exception e){
                 e.printStackTrace();
             }
-
-            Log.i(LOG_TAG, "categoryImagesUrl::::::" + categoryImagesUrl);
-            Log.i(LOG_TAG, "imageQueryResponse::::::" + imageQueryResponse);
-            Log.i(LOG_TAG, "categoryImages::::::" + Arrays.toString(categoryImages));
-
 
             return categoryImages;
         }
