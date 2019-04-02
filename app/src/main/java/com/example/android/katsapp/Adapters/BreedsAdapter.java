@@ -1,19 +1,19 @@
 package com.example.android.katsapp.Adapters;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.android.katsapp.R;
 import com.example.android.katsapp.model.Breeds;
-import com.squareup.picasso.Picasso;
 
 public class BreedsAdapter extends RecyclerView.Adapter<BreedsAdapter.BreedsAdapterViewHolder> {
 
@@ -28,8 +28,10 @@ public class BreedsAdapter extends RecyclerView.Adapter<BreedsAdapter.BreedsAdap
 
     private String breed_name, breed_id;
 
-    public BreedsAdapter(BreedAdapterClickListener mBreedClickListener){
+
+    public BreedsAdapter(BreedAdapterClickListener mBreedClickListener, Context context){
         this.mBreedClickListener = mBreedClickListener;
+        this.mContext = context;
     }
 
     public void setBreeds(Breeds[] breeds){
@@ -48,17 +50,19 @@ public class BreedsAdapter extends RecyclerView.Adapter<BreedsAdapter.BreedsAdap
 
     @Override
     public void onBindViewHolder(@NonNull BreedsAdapterViewHolder breedsAdapterViewHolder, int position) {
+
+        String country_code = mBreeds[position].getCountryCode();
+        String the_country_code = country_code.toLowerCase();
+        String country_code_image_url = "https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.1/flags/1x1/" + the_country_code + ".svg";
+
         breed_name = mBreeds[position].getName();
         breed_id = mBreeds[position].getId();
 
         breedName.setText(breed_name);
-        imageViewHolder.setImageResource(R.drawable.abys_1);
-    }
 
-    private void setImage(String image){
-        Picasso.with(mContext)
-                .load(image)
-                .fit()
+        Glide.with(mContext)
+                .load("" + country_code_image_url)
+                .apply(new RequestOptions().placeholder(R.drawable.abys_3))
                 .into(imageViewHolder);
     }
 
@@ -96,5 +100,9 @@ public class BreedsAdapter extends RecyclerView.Adapter<BreedsAdapter.BreedsAdap
 
     public interface BreedAdapterClickListener{
         void onBreedClicked(int position, String breedId);
+    }
+
+    private void loadSvg(String imageUrl) {
+        Uri uri = Uri.parse(imageUrl);
     }
 }

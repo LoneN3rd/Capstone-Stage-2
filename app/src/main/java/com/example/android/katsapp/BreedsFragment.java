@@ -19,12 +19,10 @@ import android.view.ViewGroup;
 
 import com.example.android.katsapp.Adapters.BreedsAdapter;
 import com.example.android.katsapp.model.Breeds;
-import com.example.android.katsapp.model.Images;
 import com.example.android.katsapp.provider.BreedsContract.BreedsEntry;
 import com.example.android.katsapp.utils.JsonUtils;
 import com.example.android.katsapp.utils.UrlUtils;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.concurrent.ExecutionException;
 
@@ -108,7 +106,7 @@ public class BreedsFragment extends Fragment implements BreedsAdapter.BreedAdapt
             loadingFromFav = "nooo";
         }
 
-        BreedsAdapter breedsAdapter = new BreedsAdapter(this);
+        BreedsAdapter breedsAdapter = new BreedsAdapter(this, getContext());
         breedsAdapter.setBreeds(cat_breeds);
 
         mRecyclerView.setAdapter(breedsAdapter);
