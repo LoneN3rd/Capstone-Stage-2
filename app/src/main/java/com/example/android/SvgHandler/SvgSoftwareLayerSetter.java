@@ -1,4 +1,4 @@
-package com.example.android.katsapp;
+package com.example.android.SvgHandler;
 
 import android.graphics.drawable.PictureDrawable;
 import android.support.annotation.Nullable;
