@@ -5,7 +5,6 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -25,7 +24,6 @@ import com.example.android.katsapp.provider.BreedsContract.BreedsEntry;
 import com.example.android.katsapp.provider.BreedsDbHelper;
 import com.example.android.katsapp.utils.JsonUtils;
 import com.example.android.katsapp.utils.UrlUtils;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 
@@ -186,10 +184,6 @@ public class BreedDetailsActivity extends AppCompatActivity {
 
                 String country_code_image_url = "https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.1/flags/1x1/"+country_code+".svg";
 
-                Picasso.with(this)
-                        .load(country_code_image_url)
-                        .fit()
-                        .into(country_code_image);
             }
 
             new GetBreedImageTask().execute();

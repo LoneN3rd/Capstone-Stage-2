@@ -4,8 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,7 +19,6 @@ import com.example.android.katsapp.utils.JsonUtils;
 import com.example.android.katsapp.utils.UrlUtils;
 
 import java.net.URL;
-import java.util.Arrays;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -89,7 +88,6 @@ public class CategoryDetailsActivity extends AppCompatActivity {
             try {
                 imageQueryResponse = UrlUtils.getResponseFromHttp(categoryImagesUrl);
                 categoryImages = JsonUtils.parseImagesJson(imageQueryResponse);
-
             } catch (Exception e){
                 e.printStackTrace();
             }

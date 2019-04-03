@@ -1,7 +1,6 @@
 package com.example.android.katsapp.Adapters;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -60,10 +59,12 @@ public class BreedsAdapter extends RecyclerView.Adapter<BreedsAdapter.BreedsAdap
 
         breedName.setText(breed_name);
 
+
         Glide.with(mContext)
                 .load("" + country_code_image_url)
-                .apply(new RequestOptions().placeholder(R.drawable.abys_3))
+                .apply(new RequestOptions().placeholder(R.drawable.abys_1))
                 .into(imageViewHolder);
+
     }
 
     @Override
@@ -100,9 +101,5 @@ public class BreedsAdapter extends RecyclerView.Adapter<BreedsAdapter.BreedsAdap
 
     public interface BreedAdapterClickListener{
         void onBreedClicked(int position, String breedId);
-    }
-
-    private void loadSvg(String imageUrl) {
-        Uri uri = Uri.parse(imageUrl);
     }
 }

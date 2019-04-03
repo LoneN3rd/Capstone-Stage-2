@@ -118,8 +118,6 @@ public class BreedsFragment extends Fragment implements BreedsAdapter.BreedAdapt
     @Override
     public void onBreedClicked(int position, String breedId) {
         mCallback.onBreedClick(position, breedsQueryResponse, breedId, loadingFromFav);
-
-        Log.i(LOG_TAG, "breedIdbreedId:"+breedId);
     }
 
     public interface OnBreedClickListener{
@@ -132,7 +130,7 @@ public class BreedsFragment extends Fragment implements BreedsAdapter.BreedAdapt
         Breeds[] theResult = new Breeds[0];
 
         Cursor mCursor = getContext().getContentResolver()
-                .query(uri, null, null, null, null);
+                .query(uri, null, null, null, "breed_name ASC");
 
         if (mCursor != null) {
             mCursor.moveToFirst();
@@ -144,6 +142,7 @@ public class BreedsFragment extends Fragment implements BreedsAdapter.BreedAdapt
 
                 breeds.setName(mCursor.getString(mCursor.getColumnIndex(BreedsEntry.COLUMN_BREED_NAME)));
                 breeds.setId(mCursor.getString(mCursor.getColumnIndex(BreedsEntry.COLUMN_ID)));
+                breeds.setCountryCode(mCursor.getString(mCursor.getColumnIndex(BreedsEntry.COLUMN_COUNTRY_CODE)));
 
                 theResult[i] = breeds;
 

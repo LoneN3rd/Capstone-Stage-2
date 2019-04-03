@@ -63,7 +63,7 @@ public class UrlUtils {
         Uri uri = Uri.parse(IMAGES_BASE_URL)
                 .buildUpon()
                 .appendQueryParameter(CATEGORY_PARAM, Integer.toString(imageId))
-                .appendQueryParameter(IMAGE_LIMIT, "8")
+                .appendQueryParameter(IMAGE_LIMIT, "15")
                 .build();
 
         URL url = null;
