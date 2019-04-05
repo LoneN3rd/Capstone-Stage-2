@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.ahmadrosid.svgloader.SvgLoader;
 import com.example.android.katsapp.model.Breeds;
 import com.example.android.katsapp.model.Images;
 import com.example.android.katsapp.provider.BreedsContract.BreedsEntry;
@@ -196,12 +197,9 @@ public class BreedDetailsActivity extends AppCompatActivity {
 
             setTitle(breedName);
 
-            /*
             SvgLoader.pluck()
                     .with(this)
-                    .setPlaceHolder(R.drawable.ic_star_fill, R.drawable.ic_star_fill)
-                    .load(country_code_image_url, breed_image);
-                    */
+                    .load(country_code_image_url, country_code_image);
 
             getBreedImageTask = new GetBreedImageTask();
 

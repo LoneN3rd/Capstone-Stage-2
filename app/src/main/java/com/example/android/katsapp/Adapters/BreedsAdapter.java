@@ -55,7 +55,7 @@ public class BreedsAdapter extends RecyclerView.Adapter<BreedsAdapter.BreedsAdap
 
         SvgLoader.pluck()
                 .with(mActivity)
-                .setPlaceHolder(R.drawable.abys_1, R.drawable.abys_1)
+                .setPlaceHolder(R.mipmap.image_not_available, R.mipmap.image_not_available)
                 .load(country_code_image_url, imageViewHolder);
 
         breed_name = mBreeds[position].getName();

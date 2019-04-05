@@ -93,7 +93,6 @@ public class BreedsFragment extends Fragment implements BreedsAdapter.BreedAdapt
 
             try {
                 cat_breeds = getBreedsTask.get();
-
             } catch (ExecutionException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {
