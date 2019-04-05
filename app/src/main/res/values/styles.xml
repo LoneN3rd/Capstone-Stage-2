@@ -14,4 +14,10 @@
 
     <style name="coordinatorLayoutStyle" parent="@style/Widget.Support.CoordinatorLayout" />
 
+    <style name="margins">
+        <item name="android:layout_marginStart">@dimen/_8dp</item>
+        <item name="android:layout_marginEnd">@dimen/_8dp</item>
+        <item name="android:layout_marginBottom">@dimen/_8dp</item>
+    </style>
+
 </resources>

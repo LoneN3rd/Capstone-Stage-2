@@ -1,6 +1,6 @@
 package com.example.android.katsapp.Adapters;
 
-import android.content.Context;
+import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,8 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
+import com.ahmadrosid.svgloader.SvgLoader;
 import com.example.android.katsapp.R;
 import com.example.android.katsapp.model.Breeds;
 
@@ -20,7 +19,7 @@ public class BreedsAdapter extends RecyclerView.Adapter<BreedsAdapter.BreedsAdap
 
     private BreedAdapterClickListener mBreedClickListener;
 
-    private Context mContext;
+    private Activity mActivity;
     private Breeds[] mBreeds;
     private TextView breedName;
     private ImageView imageViewHolder;
@@ -28,9 +27,9 @@ public class BreedsAdapter extends RecyclerView.Adapter<BreedsAdapter.BreedsAdap
     private String breed_name, breed_id;
 
 
-    public BreedsAdapter(BreedAdapterClickListener mBreedClickListener, Context context){
+    public BreedsAdapter(BreedAdapterClickListener mBreedClickListener, Activity activity){
         this.mBreedClickListener = mBreedClickListener;
-        this.mContext = context;
+        this.mActivity = activity;
     }
 
     public void setBreeds(Breeds[] breeds){
@@ -54,17 +53,15 @@ public class BreedsAdapter extends RecyclerView.Adapter<BreedsAdapter.BreedsAdap
         String the_country_code = country_code.toLowerCase();
         String country_code_image_url = "https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.1/flags/1x1/" + the_country_code + ".svg";
 
+        SvgLoader.pluck()
+                .with(mActivity)
+                .setPlaceHolder(R.drawable.abys_1, R.drawable.abys_1)
+                .load(country_code_image_url, imageViewHolder);
+
         breed_name = mBreeds[position].getName();
         breed_id = mBreeds[position].getId();
 
         breedName.setText(breed_name);
-
-
-        Glide.with(mContext)
-                .load("" + country_code_image_url)
-                .apply(new RequestOptions().placeholder(R.drawable.abys_1))
-                .into(imageViewHolder);
-
     }
 
     @Override

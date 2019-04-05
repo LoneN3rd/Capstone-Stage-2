@@ -31,6 +31,8 @@ public class JsonUtils {
     private static final String BREED_WIKIPEDIA = "wikipedia_url";
     private static final String CATEGORY_IMAGE_URL = "url";
 
+    private static final String LOG_TAG = JsonUtils.class.getSimpleName();
+
     // Parse Breeds
     public static Breeds[] parseBreedsJson(String jsonAllBreeds) throws JSONException {
         final JSONArray jsonArray = new JSONArray(jsonAllBreeds);

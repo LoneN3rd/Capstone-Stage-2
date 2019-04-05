@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Binder;
-import android.util.Log;
 import android.widget.AdapterView;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
@@ -40,8 +39,6 @@ public class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
         Uri uri = BreedsEntry.CONTENT_URI;
 
         mCursor = mContext.getContentResolver().query(uri, null, null, null, "_id DESC");
-
-        Log.i(LOG_TAG, "mCursor::::::: "+mCursor);
 
         Binder.restoreCallingIdentity(identityToken);
     }

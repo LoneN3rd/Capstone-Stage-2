@@ -24,11 +24,13 @@ import com.example.android.katsapp.provider.BreedsContract.BreedsEntry;
 import com.example.android.katsapp.provider.BreedsDbHelper;
 import com.example.android.katsapp.utils.JsonUtils;
 import com.example.android.katsapp.utils.UrlUtils;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 
-import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.concurrent.ExecutionException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,10 +39,12 @@ public class BreedDetailsActivity extends AppCompatActivity {
 
     int clickedBreedPosition;
     String breedsQueryResponse, breedName, breedOrigin, description, temperament, wikipedia_url, breedId;
-    String loadingFromFav, breed_id, country_code;
+    String loadingFromFav, breed_id, country_code, country_code_image_url;
     private int affection_level, adaptability, child_friendly, dog_friendly, energy_level, grooming, health_issues;
     private int intelligence, shedding_level, social_needs, stranger_friendly, hypoallergenic;
     Breeds[] breedDetails;
+    Images[] breedImageArray;
+    GetBreedImageTask getBreedImageTask;
 
     private static final String LOG_TAG = BreedsFragment.class.getSimpleName();
 
@@ -105,6 +109,9 @@ public class BreedDetailsActivity extends AppCompatActivity {
 
     @BindView(R.id.country_code_image)
     ImageView country_code_image;
+
+    @BindView(R.id.breed_image)
+    ImageView iv_breed_image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -180,15 +187,46 @@ public class BreedDetailsActivity extends AppCompatActivity {
 
                 breedId = breedDetails[clickedBreedPosition].getId();
 
-                // https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.1/flags/1x1/us.svg
+                String the_country_code = country_code.toLowerCase();
+                country_code_image_url = "https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.1/flags/1x1/" + the_country_code + ".svg";
 
-                String country_code_image_url = "https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.1/flags/1x1/"+country_code+".svg";
+                Log.i(LOG_TAG, "country_code:-"+the_country_code);
 
             }
 
-            new GetBreedImageTask().execute();
-
             setTitle(breedName);
+
+            /*
+            SvgLoader.pluck()
+                    .with(this)
+                    .setPlaceHolder(R.drawable.ic_star_fill, R.drawable.ic_star_fill)
+                    .load(country_code_image_url, breed_image);
+                    */
+
+            getBreedImageTask = new GetBreedImageTask();
+
+            getBreedImageTask.execute();
+
+            try {
+                breedImageArray = getBreedImageTask.get();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            String breedImage = "";
+
+            if (breedImageArray != null){
+                breedImage = breedImageArray[0].getImageUrl();
+            }
+
+
+            Picasso.with(this)
+                    .load(breedImage)
+                    .placeholder(R.drawable.abys_3)
+                    .error(R.drawable.abys_2)
+                    .into(iv_breed_image);
 
             origin.setText(breedOrigin);
 
@@ -396,23 +434,27 @@ public class BreedDetailsActivity extends AppCompatActivity {
             URL breedImageUrl = UrlUtils.buildBreedImageUrl(breedId);
 
             String breedImageQueryResponse = null;
+
             try {
                 breedImageQueryResponse = UrlUtils.getResponseFromHttp(breedImageUrl);
-
-                Log.i(LOG_TAG, "breedImageUrl,,"+breedImageUrl);
-                Log.i(LOG_TAG, "breedImageQueryResponse,,"+breedImageQueryResponse);
-
-            } catch (IOException e) {
+                breedImageArray = JsonUtils.parseImagesJson(breedImageQueryResponse);
+            } catch (Exception e){
                 e.printStackTrace();
             }
 
-            return new Images[0];
+            return breedImageArray;
         }
 
 
         @Override
         protected void onPostExecute(Images[] images) {
-            super.onPostExecute(images);
+            new GetBreedImageTask().cancel(true);
+
+            if (images != null){
+                breedImageArray = images;
+
+                Log.i(LOG_TAG, "breedImageArray,,"+ Arrays.toString(breedImageArray));
+            }
         }
     }
 

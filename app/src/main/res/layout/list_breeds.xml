@@ -18,8 +18,7 @@
             android:layout_width="match_parent"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
-            android:contentDescription="@string/breed_image"
-            android:src="@mipmap/bengal"/>
+            android:contentDescription="@string/breed_image"/>
 
         <TextView
             android:id="@+id/breed_title"

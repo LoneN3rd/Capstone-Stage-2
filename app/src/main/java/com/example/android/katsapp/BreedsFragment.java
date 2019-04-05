@@ -1,6 +1,5 @@
 package com.example.android.katsapp;
 
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -37,9 +36,7 @@ public class BreedsFragment extends Fragment implements BreedsAdapter.BreedAdapt
     GetBreedsTask getBreedsTask;
     OnBreedClickListener mCallback;
     public String breedsQueryResponse;
-
     private static final String LOG_TAG = BreedsFragment.class.getSimpleName();
-
     private boolean loadFav = false;
     private String loadingFromFav;
 
@@ -106,7 +103,7 @@ public class BreedsFragment extends Fragment implements BreedsAdapter.BreedAdapt
             loadingFromFav = "nooo";
         }
 
-        BreedsAdapter breedsAdapter = new BreedsAdapter(this, getContext());
+        BreedsAdapter breedsAdapter = new BreedsAdapter(this, getActivity());
         breedsAdapter.setBreeds(cat_breeds);
 
         mRecyclerView.setAdapter(breedsAdapter);
