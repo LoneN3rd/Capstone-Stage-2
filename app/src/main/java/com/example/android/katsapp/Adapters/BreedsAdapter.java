@@ -52,7 +52,6 @@ public class BreedsAdapter extends RecyclerView.Adapter<BreedsAdapter.BreedsAdap
     public void onBindViewHolder(@NonNull BreedsAdapterViewHolder breedsAdapterViewHolder, int position) {
 
         String country_code = mBreeds[position].getCountryCode().toLowerCase(Locale.ENGLISH);
-        //String the_country_code = country_code.toLowerCase();
         String country_code_image_url = "https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.1/flags/1x1/" + country_code + ".svg";
 
         SvgLoader.pluck()
