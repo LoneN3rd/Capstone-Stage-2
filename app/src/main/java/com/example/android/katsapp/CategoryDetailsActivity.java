@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -40,12 +41,28 @@ public class CategoryDetailsActivity extends AppCompatActivity {
     @BindView(R.id.card_image_not_found)
     CardView card_image_not_found;
 
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category_details);
 
         ButterKnife.bind(this);
+
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                finish();
+            }
+        });
 
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2);
         mRecyclerView.setLayoutManager(layoutManager);
@@ -66,10 +83,10 @@ public class CategoryDetailsActivity extends AppCompatActivity {
 
             Log.i(LOG_TAG, "categoryName,,, "+categoryName);
 
-            setTitle("yfhyhfyhf");
-
             new GetCategoryImagesTask().execute();
         }
+
+        setTitle("Cats in "+categoryName);
     }
 
     // Get Breed Images AsyncTask
