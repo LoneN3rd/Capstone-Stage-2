@@ -31,6 +31,7 @@ import org.json.JSONException;
 
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 import butterknife.BindView;
@@ -123,6 +124,17 @@ public class BreedDetailsActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                finish();
+            }
+        });
+
         Intent intent = getIntent();
 
         if (intent != null){
@@ -188,12 +200,10 @@ public class BreedDetailsActivity extends AppCompatActivity {
 
                 breedId = breedDetails[clickedBreedPosition].getId();
 
-                String the_country_code = country_code.toLowerCase();
-                country_code_image_url = "https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.1/flags/1x1/" + the_country_code + ".svg";
-
-                Log.i(LOG_TAG, "country_code:-"+the_country_code);
-
             }
+
+            String the_country_code = country_code.toLowerCase(Locale.ROOT);
+            country_code_image_url = "https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.1/flags/1x1/" + the_country_code + ".svg";
 
             setTitle(breedName);
 
