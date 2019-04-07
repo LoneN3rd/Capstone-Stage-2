@@ -2,6 +2,7 @@ package com.example.android.katsapp;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -10,10 +11,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuItem;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
 import com.example.android.katsapp.model.Breeds;
 
@@ -53,6 +52,8 @@ public class MainActivity extends AppCompatActivity implements BreedsFragment.On
         navigationView = findViewById(R.id.nav_view);
 
         setupDrawerContent(navigationView);
+
+        setTitle(R.string.cat_breeds);
 
         // Load BreedsFragment by default
         BreedsFragment breedsFragment = new BreedsFragment();
