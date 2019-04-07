@@ -15,6 +15,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.android.katsapp.Adapters.BreedsAdapter;
 import com.example.android.katsapp.model.Breeds;
@@ -39,6 +42,9 @@ public class BreedsFragment extends Fragment implements BreedsAdapter.BreedAdapt
     private static final String LOG_TAG = BreedsFragment.class.getSimpleName();
     private boolean loadFav = false;
     private String loadingFromFav;
+    ProgressBar progressBar;
+    private Button buttonRetry;
+    private TextView tvError;
 
     public BreedsFragment() {
         // Required empty public constructor
@@ -66,6 +72,17 @@ public class BreedsFragment extends Fragment implements BreedsAdapter.BreedAdapt
 
         View rootView = inflater.inflate(R.layout.fragment_breeds, container, false);
 
+        progressBar = rootView.findViewById(R.id.progressbar);
+        buttonRetry = rootView.findViewById(R.id.btn_retry);
+        buttonRetry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                retry();
+            }
+        });
+
+        tvError = rootView.findViewById(R.id.tv_error);
+
         mRecyclerView = rootView.findViewById(R.id.rv_breeds);
 
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
@@ -86,6 +103,13 @@ public class BreedsFragment extends Fragment implements BreedsAdapter.BreedAdapt
             cat_breeds = getBreedNames();
 
         } else {
+
+            if (!(CheckNetwork.isInternetAvailable(getContext()))){
+
+                networkError();
+
+                return rootView;
+            }
 
             getBreedsTask = new GetBreedsTask();
 
@@ -109,6 +133,29 @@ public class BreedsFragment extends Fragment implements BreedsAdapter.BreedAdapt
 
         // Inflate the layout for this fragment
         return rootView;
+    }
+
+    public void networkError(){
+        progressBar.setVisibility(View.INVISIBLE);
+        buttonRetry.setVisibility(View.VISIBLE);
+        tvError.setVisibility(View.VISIBLE);
+    }
+
+    private void retry(){
+        if (!(CheckNetwork.isInternetAvailable(getContext()))){
+            networkError();
+            return;
+        }
+
+        hideViews();
+
+        getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+    }
+
+    public void hideViews(){
+        tvError.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.INVISIBLE);
+        buttonRetry.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -159,10 +206,25 @@ public class BreedsFragment extends Fragment implements BreedsAdapter.BreedAdapt
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+
+            mRecyclerView.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected Breeds[] doInBackground(String... strings) {
+
+            if (!(CheckNetwork.isInternetAvailable(getContext()))){
+                networkError();
+                return null;
+            }
+
+            if (UrlUtils.API_KEY.equals("")){
+                networkError();
+                tvError.setText(R.string.api_error_message);
+                buttonRetry.setVisibility(View.INVISIBLE);
+                return null;
+            }
 
             URL theBreedsUrl = UrlUtils.buildUrl();
 
@@ -184,6 +246,9 @@ public class BreedsFragment extends Fragment implements BreedsAdapter.BreedAdapt
 
             if (breeds != null){
                 cat_breeds = breeds;
+
+                mRecyclerView.setVisibility(View.VISIBLE);
+                hideViews();
             } else {
                 Log.d(LOG_TAG, "Problems with the adapter");
             }
