@@ -88,8 +88,10 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
             e.printStackTrace();
         }
 
-        adapter = new CategoriesAdapter(getContext(), cat_categories);
-        lvItems.setAdapter(adapter);
+        if (cat_categories != null) {
+            adapter = new CategoriesAdapter(getContext(), cat_categories);
+            lvItems.setAdapter(adapter);
+        }
 
         return rootView;
     }
@@ -141,6 +143,17 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
 
         @Override
         protected Categories[] doInBackground(String... strings) {
+
+            if (!(CheckNetwork.isInternetAvailable(getContext()))){
+                networkError();
+                return null;
+            }
+
+            if (UrlUtils.API_KEY.equals("")){
+                networkError();
+                tvError.setText(R.string.api_error_message);
+                return null;
+            }
 
             URL theCategoriesUrl = UrlUtils.buildCategoriesUrl();
 
