@@ -76,6 +76,13 @@ public class CategoryDetailsActivity extends AppCompatActivity {
             }
         });
 
+        buttonRetry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                retry();
+            }
+        });
+
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
