@@ -12,7 +12,10 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.android.katsapp.Adapters.CategoryDetailsAdapter;
 import com.example.android.katsapp.model.Images;
@@ -43,6 +46,15 @@ public class CategoryDetailsActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+
+    @BindView(R.id.progressbar)
+    ProgressBar progressBar;
+
+    @BindView(R.id.btn_retry)
+    Button buttonRetry;
+
+    @BindView(R.id.tv_error)
+    TextView tvError;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +87,14 @@ public class CategoryDetailsActivity extends AppCompatActivity {
             mRecyclerView.setLayoutManager(new GridLayoutManager(this, 4));
         }
 
+        if (!(CheckNetwork.isInternetAvailable(this))) {
+
+            mRecyclerView.setVisibility(View.GONE);
+            networkError();
+
+            return;
+        }
+
         Intent intent = getIntent();
 
         if (intent != null){
@@ -89,16 +109,55 @@ public class CategoryDetailsActivity extends AppCompatActivity {
         setTitle("Cats in "+categoryName);
     }
 
+    public void networkError(){
+        progressBar.setVisibility(View.INVISIBLE);
+        buttonRetry.setVisibility(View.VISIBLE);
+        tvError.setVisibility(View.VISIBLE);
+    }
+
+    private void retry(){
+        if (!(CheckNetwork.isInternetAvailable(this))){
+            networkError();
+            return;
+        }
+
+        hideViews();
+
+        // Refresh Activity
+        finish();
+        startActivity(getIntent());
+    }
+
+    public void hideViews(){
+        tvError.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.INVISIBLE);
+        buttonRetry.setVisibility(View.INVISIBLE);
+    }
+
     // Get Breed Images AsyncTask
     @SuppressLint("StaticFieldLeak")
     private class GetCategoryImagesTask extends AsyncTask<String, Void, Images[]> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+
+            mRecyclerView.setVisibility(View.GONE);
+            progressBar.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected Images[] doInBackground(String... strings) {
+
+            if (!(CheckNetwork.isInternetAvailable(CategoryDetailsActivity.this))){
+                networkError();
+                return null;
+            }
+
+            if (UrlUtils.API_KEY.equals("")){
+                networkError();
+                tvError.setText(R.string.api_error_message);
+                return null;
+            }
 
             URL categoryImagesUrl = UrlUtils.buildCategoryImagesUrl(categoryId);
 
@@ -125,6 +184,9 @@ public class CategoryDetailsActivity extends AppCompatActivity {
                 } else {
                     CategoryDetailsAdapter adapter = new CategoryDetailsAdapter(CategoryDetailsActivity.this, categoryImages);
                     mRecyclerView.setAdapter(adapter);
+
+                    mRecyclerView.setVisibility(View.VISIBLE);
+                    hideViews();
                 }
 
             }
