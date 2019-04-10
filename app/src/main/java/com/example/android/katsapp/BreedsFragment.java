@@ -89,22 +89,21 @@ public class BreedsFragment extends Fragment implements BreedsAdapter.BreedAdapt
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
 
-        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        }
-        else{
+        } else {
             mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 4));
         }
 
         // if loadFav = false, get breeds data from database
-        if (loadFav){
+        if (loadFav) {
 
             loadingFromFav = "yeees";
             cat_breeds = getBreedNames();
 
         } else {
 
-            if (!(CheckNetwork.isInternetAvailable(getContext()))){
+            if (!(CheckNetwork.isInternetAvailable(getContext()))) {
 
                 networkError();
 
@@ -126,10 +125,13 @@ public class BreedsFragment extends Fragment implements BreedsAdapter.BreedAdapt
             loadingFromFav = "nooo";
         }
 
+        if (cat_breeds != null) {
+
         BreedsAdapter breedsAdapter = new BreedsAdapter(this, getActivity());
         breedsAdapter.setBreeds(cat_breeds);
 
         mRecyclerView.setAdapter(breedsAdapter);
+        }
 
         // Inflate the layout for this fragment
         return rootView;
@@ -222,7 +224,6 @@ public class BreedsFragment extends Fragment implements BreedsAdapter.BreedAdapt
             if (UrlUtils.API_KEY.equals("")){
                 networkError();
                 tvError.setText(R.string.api_error_message);
-                buttonRetry.setVisibility(View.INVISIBLE);
                 return null;
             }
 
