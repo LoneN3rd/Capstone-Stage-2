@@ -11,10 +11,14 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -115,6 +119,60 @@ public class BreedDetailsActivity extends AppCompatActivity {
     @BindView(R.id.breed_image)
     ImageView iv_breed_image;
 
+    @BindView(R.id.progressbar)
+    ProgressBar progressBar;
+
+    @BindView(R.id.btn_retry)
+    Button buttonRetry;
+
+    @BindView(R.id.tv_error)
+    TextView tvError;
+
+    @BindView(R.id.affection_label)
+    TextView affection_label;
+
+    @BindView(R.id.adaptability_label)
+    TextView adaptability_label;
+
+    @BindView(R.id.child_friendly_label)
+    TextView child_friendly_label;
+
+    @BindView(R.id.dog_friendly_label)
+    TextView dog_friendly_label;
+
+    @BindView(R.id.energy_level_label)
+    TextView energy_level_label;
+
+    @BindView(R.id.grooming_label)
+    TextView grooming_label;
+
+    @BindView(R.id.health_issues_label)
+    TextView health_issues_label;
+
+    @BindView(R.id.intelligence_label)
+    TextView intelligence_label;
+
+    @BindView(R.id.shedding_level_label)
+    TextView shedding_level_label;
+
+    @BindView(R.id.social_needs_label)
+    TextView social_needs_label;
+
+    @BindView(R.id.stranger_friendly_label)
+    TextView stranger_friendly_label;
+
+    @BindView(R.id.cv_origin)
+    CardView cv_origin;
+
+    @BindView(R.id.cv_hypoallergenic)
+    CardView cv_hypoallergenic;
+
+    @BindView(R.id.lly_data_handling)
+    LinearLayout lly_data_handling;
+
+    @BindView(R.id.lly2_data_handling)
+    LinearLayout lly2_data_handling;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,6 +192,21 @@ public class BreedDetailsActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        buttonRetry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                retry();
+            }
+        });
+
+        if (!(CheckNetwork.isInternetAvailable(this))){
+
+            hideDataViews();
+            networkError();
+
+            return;
+        }
 
         Intent intent = getIntent();
 
@@ -172,6 +245,13 @@ public class BreedDetailsActivity extends AppCompatActivity {
                 wikipedia_url = breedDetails[0].getWikipedia_url();
 
             } else {
+
+                if (!(CheckNetwork.isInternetAvailable(this))){
+
+                    networkError();
+
+                    return;
+                }
 
                 try {
                     breedDetails = JsonUtils.parseBreedsJson(breedsQueryResponse);
@@ -295,6 +375,52 @@ public class BreedDetailsActivity extends AppCompatActivity {
                 updateUi();
             }
         });
+
+    }
+
+    public void networkError(){
+        progressBar.setVisibility(View.INVISIBLE);
+        buttonRetry.setVisibility(View.VISIBLE);
+        tvError.setVisibility(View.VISIBLE);
+    }
+
+    private void retry(){
+        if (!(CheckNetwork.isInternetAvailable(this))){
+            networkError();
+            return;
+        }
+
+        hideViews();
+
+        // Refresh Activity
+        finish();
+        startActivity(getIntent());
+    }
+
+    public void hideViews(){
+        tvError.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.INVISIBLE);
+        buttonRetry.setVisibility(View.INVISIBLE);
+    }
+
+    @SuppressLint("RestrictedApi")
+    public void hideDataViews(){
+
+        fab.setVisibility(View.INVISIBLE);
+        fab_remove.setVisibility(View.INVISIBLE);
+
+        lly_data_handling.setVisibility(View.GONE);
+        lly2_data_handling.setVisibility(View.GONE);
+    }
+
+    @SuppressLint("RestrictedApi")
+    public void showDataViews(){
+
+        fab.setVisibility(View.VISIBLE);
+        fab_remove.setVisibility(View.VISIBLE);
+
+        lly_data_handling.setVisibility(View.VISIBLE);
+        lly2_data_handling.setVisibility(View.VISIBLE);
 
     }
 
@@ -434,10 +560,24 @@ public class BreedDetailsActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+
+            hideDataViews();
+            progressBar.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected Images[] doInBackground(String... strings) {
+
+            if (!(CheckNetwork.isInternetAvailable(BreedDetailsActivity.this))){
+                networkError();
+                return null;
+            }
+
+            if (UrlUtils.API_KEY.equals("")){
+                networkError();
+                tvError.setText(R.string.api_error_message);
+                return null;
+            }
 
             URL breedImageUrl = UrlUtils.buildBreedImageUrl(breedId);
 
@@ -460,6 +600,9 @@ public class BreedDetailsActivity extends AppCompatActivity {
 
             if (images != null){
                 breedImageArray = images;
+
+                showDataViews();
+                hideViews();
 
                 Log.i(LOG_TAG, "breedImageArray,,"+ Arrays.toString(breedImageArray));
             }
