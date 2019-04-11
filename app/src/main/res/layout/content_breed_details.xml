@@ -366,7 +366,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/btn_retry_text"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                android:theme="@style/ButtonColored"/>
 
             <TextView
                 android:id="@+id/tv_error"
