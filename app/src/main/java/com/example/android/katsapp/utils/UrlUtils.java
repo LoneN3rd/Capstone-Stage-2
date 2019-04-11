@@ -3,6 +3,8 @@ package com.example.android.katsapp.utils;
 import android.net.Uri;
 import android.util.Log;
 
+import com.example.android.katsapp.BuildConfig;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -12,9 +14,7 @@ import java.util.Scanner;
 
 public class UrlUtils {
 
-    public static final String API_KEY = "4250b566-cadf-4afd-8be7-125065454777";
-    //public static final String API_KEY = "";
-    //public static final String API_KEY = BuildConfig.MOVIE_DB_API_KEY;
+    public static final String API_KEY = BuildConfig.CATS_API_KEY;
     private static final String BREEDS_BASE_URL = "https://api.thecatapi.com/v1/breeds?attach_breed=0";
     private static final String CATEGORIES_BASE_URL = "https://api.thecatapi.com/v1/categories";
     private static final String IMAGES_BASE_URL = "https://api.thecatapi.com/v1/images/search";
