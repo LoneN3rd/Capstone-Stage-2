@@ -1,5 +1,5 @@
 # Cats App
-This App is part of the second phase of the Capstone Project in the Google Android developer Nano-degree
+Cats App is part of the second phase of the Capstone Project in the Google Android developer Nano-degree
 
 Get to know much about the different cat breeds as well as categories we have in the world and
 browse through amazing photos of each breed / category. The App provides detailed
