@@ -200,24 +200,16 @@ public class BreedDetailsActivity extends AppCompatActivity {
             }
         });
 
-        if (!(CheckNetwork.isInternetAvailable(this))){
-
-            hideDataViews();
-            networkError();
-
-            return;
-        }
-
         Intent intent = getIntent();
 
-        if (intent != null){
+        if (intent != null) {
 
             clickedBreedPosition = intent.getIntExtra("clickedBreedPosition", 0);
             breed_id = intent.getStringExtra("breed_id");
             loadingFromFav = intent.getStringExtra("loadingFromFav");
             breedsQueryResponse = intent.getStringExtra("breedsQueryResponse");
 
-            if (loadingFromFav.equals("yeees")){
+            if (loadingFromFav.equals("yeees")) {
 
                 breedId = breed_id;
 
@@ -248,6 +240,7 @@ public class BreedDetailsActivity extends AppCompatActivity {
 
                 if (!(CheckNetwork.isInternetAvailable(this))){
 
+                    hideDataViews();
                     networkError();
 
                     return;
@@ -287,34 +280,39 @@ public class BreedDetailsActivity extends AppCompatActivity {
 
             setTitle(breedName);
 
-            SvgLoader.pluck()
-                    .with(this)
-                    .load(country_code_image_url, country_code_image);
-
-            getBreedImageTask = new GetBreedImageTask();
-
-            getBreedImageTask.execute();
-
-            try {
-                breedImageArray = getBreedImageTask.get();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
             String breedImage = "";
 
-            if (breedImageArray != null){
-                breedImage = breedImageArray[0].getImageUrl();
+            if (CheckNetwork.isInternetAvailable(BreedDetailsActivity.this)) {
+                SvgLoader.pluck()
+                        .with(this)
+                        .load(country_code_image_url, country_code_image);
+
+                getBreedImageTask = new GetBreedImageTask();
+
+                getBreedImageTask.execute();
+
+                try {
+                    breedImageArray = getBreedImageTask.get();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                if (breedImageArray != null) {
+                    breedImage = breedImageArray[0].getImageUrl();
+                }
             }
 
-
-            Picasso.with(this)
-                    .load(breedImage)
-                    .placeholder(R.drawable.abys_3)
-                    .error(R.drawable.abys_2)
-                    .into(iv_breed_image);
+            if (breedImage != ""){
+                iv_breed_image.setImageResource(R.drawable.abys_2);
+            } else {
+                Picasso.with(this)
+                        .load(breedImage)
+                        .placeholder(R.drawable.abys_3)
+                        .error(R.drawable.abys_2)
+                        .into(iv_breed_image);
+            }
 
             origin.setText(breedOrigin);
 
