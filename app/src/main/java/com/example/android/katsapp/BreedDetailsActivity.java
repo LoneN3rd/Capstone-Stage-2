@@ -302,6 +302,8 @@ public class BreedDetailsActivity extends AppCompatActivity {
                 if (breedImageArray != null) {
                     breedImage = breedImageArray[0].getImageUrl();
                 }
+            } else {
+                breedImage = "https://cdn2.thecatapi.com/images/27777g.jpg";
             }
 
             if (breedImage != ""){
