@@ -55,7 +55,8 @@
         android:src="@drawable/ic_favorite"
         app:backgroundTint="@color/colorPrimary"
         app:rippleColor="@color/colorPrimary"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:contentDescription="@string/mark_favorite"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_remove"
@@ -67,6 +68,7 @@
         android:src="@drawable/ic_remove"
         app:backgroundTint="@color/colorPrimary"
         app:rippleColor="@color/colorPrimary"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:contentDescription="@string/remove_favorite"/>
 
 </android.support.design.widget.CoordinatorLayout>
