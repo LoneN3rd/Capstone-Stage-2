@@ -349,8 +349,8 @@ public class BreedDetailsActivity extends AppCompatActivity {
                 // Save breed to DB
                 saveBreedData();
 
-                Snackbar.make(view, breedName+" marked as favorite", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Snackbar.make(view, breedName + " "+ R.string.marked_favorite, Snackbar.LENGTH_LONG)
+                        .setAction(R.string.action, null).show();
 
                 // send a broadcast to update the appwidget
                 CatsWidget.sendRefreshBroadcast(BreedDetailsActivity.this);
@@ -366,8 +366,8 @@ public class BreedDetailsActivity extends AppCompatActivity {
                 deleteBreed(new BreedsDbHelper(BreedDetailsActivity.this)
                         .getReadableDatabase(), BreedsEntry.TABLE_NAME, breedId);
 
-                Snackbar.make(view, breedName+" removed from favorites", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+                Snackbar.make(view, breedName + " " + R.string.removed_favorite, Snackbar.LENGTH_LONG)
+                            .setAction(R.string.action, null).show();
 
                 // send a broadcast to update the appwidget
                 CatsWidget.sendRefreshBroadcast(BreedDetailsActivity.this);
