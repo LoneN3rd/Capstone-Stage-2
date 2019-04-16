@@ -33,5 +33,11 @@
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
     <string name="mark_favorite">Mark as favorite</string>
+    <string name="marked_favorite">marked as favorite</string>
     <string name="remove_favorite">Remove from favorites</string>
+    <string name="removed_favorite">removed from favorites</string>
+
+    <string name="action">Action</string>
+
+    <string name="country_code_image_url">https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.1/flags/1x1/</string>
 </resources>
