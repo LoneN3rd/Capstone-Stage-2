@@ -11,28 +11,22 @@ public class CheckNetwork {
 
     private static final String LOG_TAG = CheckNetwork.class.getSimpleName();
 
-    public static boolean isInternetAvailable(Context context){
+    public static boolean isInternetAvailable(Context context) {
 
         ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         assert connMgr != null;
 
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
-        if (networkInfo == null)
-        {
-            Log.d(LOG_TAG,"no internet connection");
+        if (networkInfo == null) {
+            Log.d(LOG_TAG, "no internet connection");
             return false;
-        }
-        else
-        {
-            if(networkInfo.isConnected())
-            {
-                Log.d(TAG," internet connection available...");
+        } else {
+            if (networkInfo.isConnected()) {
+                Log.d(TAG, " internet connection available...");
                 return true;
-            }
-            else
-            {
-                Log.d(TAG," internet connection");
+            } else {
+                Log.d(TAG, " internet connection");
                 return true;
             }
 
