@@ -38,10 +38,6 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
 
     private static final String LOG_TAG = CategoriesFragment.class.getSimpleName();
 
-    public CategoriesFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
