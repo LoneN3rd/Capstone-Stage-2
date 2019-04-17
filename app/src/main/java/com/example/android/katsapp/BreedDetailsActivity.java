@@ -306,15 +306,11 @@ public class BreedDetailsActivity extends AppCompatActivity {
                 breedImage = "https://cdn2.thecatapi.com/images/27777g.jpg";
             }
 
-            if (breedImage != ""){
-                iv_breed_image.setImageResource(R.drawable.abys_2);
-            } else {
-                Picasso.with(this)
-                        .load(breedImage)
-                        .placeholder(R.drawable.abys_3)
-                        .error(R.drawable.abys_2)
-                        .into(iv_breed_image);
-            }
+            Picasso.with(this)
+                    .load(breedImage)
+                    .placeholder(R.drawable.abys_3)
+                    .error(R.drawable.abys_2)
+                    .into(iv_breed_image);
 
             origin.setText(breedOrigin);
 
@@ -349,7 +345,7 @@ public class BreedDetailsActivity extends AppCompatActivity {
                 // Save breed to DB
                 saveBreedData();
 
-                Snackbar.make(view, breedName + " "+ R.string.marked_favorite, Snackbar.LENGTH_LONG)
+                Snackbar.make(view, breedName + " "+ getString(R.string.marked_favorite), Snackbar.LENGTH_LONG)
                         .setAction(R.string.action, null).show();
 
                 // send a broadcast to update the appwidget
@@ -366,7 +362,7 @@ public class BreedDetailsActivity extends AppCompatActivity {
                 deleteBreed(new BreedsDbHelper(BreedDetailsActivity.this)
                         .getReadableDatabase(), BreedsEntry.TABLE_NAME, breedId);
 
-                Snackbar.make(view, breedName + " " + R.string.removed_favorite, Snackbar.LENGTH_LONG)
+                Snackbar.make(view, breedName + " " + getString(R.string.removed_favorite), Snackbar.LENGTH_LONG)
                             .setAction(R.string.action, null).show();
 
                 // send a broadcast to update the appwidget
