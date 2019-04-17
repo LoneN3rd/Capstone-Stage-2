@@ -2,6 +2,7 @@ package com.example.android.katsapp;
 
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -27,14 +28,14 @@ import java.util.concurrent.ExecutionException;
 
 public class CategoriesFragment extends Fragment implements AdapterView.OnItemClickListener {
 
-    Categories[] cat_categories;
+    private static Categories[] cat_categories;
     GetCategoriesTask getCategoriesTask;
-    public String categoriesQueryResponse;
+    public static String categoriesQueryResponse;
     CategoriesAdapter adapter;
-    ProgressBar progressBar;
-    private Button buttonRetry;
-    private TextView tvError;
-    ListView lvItems;
+    private static ProgressBar progressBar;
+    private static Button buttonRetry;
+    private static TextView tvError;
+    private static ListView lvItems;
 
     private static final String LOG_TAG = CategoriesFragment.class.getSimpleName();
 
@@ -71,7 +72,7 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
             return rootView;
         }
 
-        getCategoriesTask = new GetCategoriesTask();
+        getCategoriesTask = new GetCategoriesTask(getContext());
 
         getCategoriesTask.execute();
 
@@ -104,7 +105,7 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
         }
     }
 
-    public void networkError(){
+    public static void networkError(){
         progressBar.setVisibility(View.INVISIBLE);
         buttonRetry.setVisibility(View.VISIBLE);
         tvError.setVisibility(View.VISIBLE);
@@ -121,14 +122,21 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
         getFragmentManager().beginTransaction().detach(this).attach(this).commit();
     }
 
-    public void hideViews(){
+    public static void hideViews(){
         tvError.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.INVISIBLE);
         buttonRetry.setVisibility(View.INVISIBLE);
     }
 
     @SuppressLint("StaticFieldLeak")
-    private class GetCategoriesTask extends AsyncTask<String, Void, Categories[]> {
+    private static class GetCategoriesTask extends AsyncTask<String, Void, Categories[]> {
+
+        static Context mContext;
+
+        GetCategoriesTask(Context context){
+            mContext = context;
+        }
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -140,7 +148,7 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
         @Override
         protected Categories[] doInBackground(String... strings) {
 
-            if (!(CheckNetwork.isInternetAvailable(getContext()))){
+            if (!(CheckNetwork.isInternetAvailable(mContext))){
                 networkError();
                 return null;
             }
@@ -167,7 +175,7 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
 
         @Override
         protected void onPostExecute(Categories[] categories) {
-            new GetCategoriesTask().cancel(true);
+            new GetCategoriesTask(mContext).cancel(true);
 
             if (categories != null){
                 cat_categories = categories;
