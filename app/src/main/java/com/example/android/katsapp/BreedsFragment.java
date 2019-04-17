@@ -34,21 +34,17 @@ import java.util.concurrent.ExecutionException;
  */
 public class BreedsFragment extends Fragment implements BreedsAdapter.BreedAdapterClickListener {
 
-    RecyclerView mRecyclerView;
-    Breeds[] cat_breeds;
+    private static RecyclerView mRecyclerView;
+    static Breeds[] cat_breeds;
     GetBreedsTask getBreedsTask;
     OnBreedClickListener mCallback;
-    public String breedsQueryResponse;
+    public static String breedsQueryResponse;
     private static final String LOG_TAG = BreedsFragment.class.getSimpleName();
     private boolean loadFav = false;
     private String loadingFromFav;
-    ProgressBar progressBar;
-    private Button buttonRetry;
-    private TextView tvError;
-
-    public BreedsFragment() {
-        // Required empty public constructor
-    }
+    private static ProgressBar progressBar;
+    private static Button buttonRetry;
+    private static TextView tvError;
 
     public void loadFromFav(){
         this.loadFav = true;
@@ -110,7 +106,7 @@ public class BreedsFragment extends Fragment implements BreedsAdapter.BreedAdapt
                 return rootView;
             }
 
-            getBreedsTask = new GetBreedsTask();
+            getBreedsTask = new GetBreedsTask(getContext());
 
             getBreedsTask.execute();
 
@@ -137,7 +133,7 @@ public class BreedsFragment extends Fragment implements BreedsAdapter.BreedAdapt
         return rootView;
     }
 
-    public void networkError(){
+    public static void networkError(){
         progressBar.setVisibility(View.INVISIBLE);
         buttonRetry.setVisibility(View.VISIBLE);
         tvError.setVisibility(View.VISIBLE);
@@ -154,7 +150,7 @@ public class BreedsFragment extends Fragment implements BreedsAdapter.BreedAdapt
         getFragmentManager().beginTransaction().detach(this).attach(this).commit();
     }
 
-    public void hideViews(){
+    public static void hideViews(){
         tvError.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.INVISIBLE);
         buttonRetry.setVisibility(View.INVISIBLE);
@@ -204,7 +200,14 @@ public class BreedsFragment extends Fragment implements BreedsAdapter.BreedAdapt
     }
 
     @SuppressLint("StaticFieldLeak")
-    private class GetBreedsTask extends AsyncTask<String, Void, Breeds[]> {
+    private static class GetBreedsTask extends AsyncTask<String, Void, Breeds[]> {
+
+        static Context mContext;
+
+        GetBreedsTask(Context context){
+            mContext = context;
+        }
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -216,7 +219,7 @@ public class BreedsFragment extends Fragment implements BreedsAdapter.BreedAdapt
         @Override
         protected Breeds[] doInBackground(String... strings) {
 
-            if (!(CheckNetwork.isInternetAvailable(getContext()))){
+            if (!(CheckNetwork.isInternetAvailable(mContext))){
                 networkError();
                 return null;
             }
@@ -243,7 +246,7 @@ public class BreedsFragment extends Fragment implements BreedsAdapter.BreedAdapt
 
         @Override
         protected void onPostExecute(Breeds[] breeds) {
-            new GetBreedsTask().cancel(true);
+            new GetBreedsTask(mContext).cancel(true);
 
             if (breeds != null){
                 cat_breeds = breeds;
