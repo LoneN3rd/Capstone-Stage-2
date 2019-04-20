@@ -52,4 +52,7 @@ dependencies {
     implementation 'com.github.ar-android:AndroidSvgLoader:1.0.1'
 
     implementation 'com.google.firebase:firebase-ads:17.2.0'
+    implementation 'com.google.firebase:firebase-core:16.0.8'
 }
+
+apply plugin: 'com.google.gms.google-services'
