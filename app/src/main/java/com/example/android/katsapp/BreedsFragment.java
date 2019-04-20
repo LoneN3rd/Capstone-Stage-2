@@ -157,12 +157,12 @@ public class BreedsFragment extends Fragment implements BreedsAdapter.BreedAdapt
     }
 
     @Override
-    public void onBreedClicked(int position, String breedId) {
-        mCallback.onBreedClick(position, breedsQueryResponse, breedId, loadingFromFav);
+    public void onBreedClicked(int position, String breedId, String breedName) {
+        mCallback.onBreedClick(position, breedsQueryResponse, breedId, loadingFromFav, breedName);
     }
 
     public interface OnBreedClickListener{
-        void onBreedClick(int position, String breedsQueryResponse, String breedId, String loadingFromFav);
+        void onBreedClick(int position, String breedsQueryResponse, String breedId, String loadingFromFav, String breedName);
     }
 
     private Breeds[] getBreedNames(){
