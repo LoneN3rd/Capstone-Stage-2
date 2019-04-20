@@ -12,15 +12,9 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.example.android.katsapp.model.Breeds;
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.InterstitialAd;
-import com.google.android.gms.ads.MobileAds;
 
 public class MainActivity extends AppCompatActivity implements BreedsFragment.OnBreedClickListener {
 
@@ -33,10 +27,6 @@ public class MainActivity extends AppCompatActivity implements BreedsFragment.On
     private static final String LOG_TAG = BreedsFragment.class.getSimpleName();
 
     FragmentManager fragmentManager = getSupportFragmentManager();
-
-    private InterstitialAd mInterstitialAd;
-
-    AdRequest request;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,27 +54,12 @@ public class MainActivity extends AppCompatActivity implements BreedsFragment.On
 
         setTitle(R.string.cat_breeds);
 
-        // Initialize MobileAds. Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713
-        MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
-
-        // test ad unit ID: ca-app-pub-3940256099942544/1033173712
-        mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
-        mInterstitialAd.loadAd(new AdRequest.Builder().build());
-
-        mInterstitialAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdClosed() {
-                // Load the next interstitial.
-                mInterstitialAd.loadAd(new AdRequest.Builder().build());
-            }
-
-        });
-
         // test Device ID 8D03E396134C87A506F0629CE91BAF68
+        /*
         request = new AdRequest.Builder()
                 .addTestDevice("8D03E396134C87A506F0629CE91BAF68")
                 .build();
+                */
 
 
         // Load BreedsFragment by default
@@ -94,27 +69,6 @@ public class MainActivity extends AppCompatActivity implements BreedsFragment.On
                 .replace(R.id.content_frame, breedsFragment)
                 .commit();
 
-    }
-
-    public void checkDevice(){
-        if (request.isTestDevice(this)){
-
-            Toast.makeText(this, "isTestDevice", Toast.LENGTH_LONG).show();
-
-        } else {
-            Toast.makeText(this, "isNotTestDevice", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    public void showAd(){
-
-        if (mInterstitialAd.isLoaded()) {
-            mInterstitialAd.show();
-        } else {
-            Log.d(LOG_TAG, "The interstitial wasn't loaded yet.");
-        }
-
-        // Toast.makeText(this, "isTestDevice: " + request.isTestDevice(this), Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -163,8 +117,6 @@ public class MainActivity extends AppCompatActivity implements BreedsFragment.On
                         .commit();
                 break;
             case R.id.nav_categories:
-
-                showAd();
 
                 CategoriesFragment categoriesFragment = new CategoriesFragment();
 

@@ -22,6 +22,9 @@ import com.example.android.katsapp.Adapters.CategoriesAdapter;
 import com.example.android.katsapp.model.Categories;
 import com.example.android.katsapp.utils.JsonUtils;
 import com.example.android.katsapp.utils.UrlUtils;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 
 import java.net.URL;
 import java.util.concurrent.ExecutionException;
@@ -36,6 +39,7 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
     private static Button buttonRetry;
     private static TextView tvError;
     private static ListView lvItems;
+    private AdView mAdView;
 
     private static final String LOG_TAG = CategoriesFragment.class.getSimpleName();
 
@@ -49,8 +53,15 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        MobileAds.initialize(getContext(),
+                "ca-app-pub-3940256099942544~3347511713");
+
         // Inflate the layout for this fragment
         View rootView =  inflater.inflate(R.layout.fragment_categories, container, false);
+
+        mAdView = rootView.findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
         lvItems = rootView.findViewById(R.id.list);
         lvItems.setOnItemClickListener(this);
