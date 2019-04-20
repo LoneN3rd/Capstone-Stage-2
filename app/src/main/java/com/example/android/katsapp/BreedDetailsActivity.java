@@ -29,6 +29,7 @@ import com.example.android.katsapp.provider.BreedsContract.BreedsEntry;
 import com.example.android.katsapp.provider.BreedsDbHelper;
 import com.example.android.katsapp.utils.JsonUtils;
 import com.example.android.katsapp.utils.UrlUtils;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -173,10 +174,15 @@ public class BreedDetailsActivity extends AppCompatActivity {
     @BindView(R.id.lly2_data_handling)
     LinearLayout lly2_data_handling;
 
+    private FirebaseAnalytics mFirebaseAnalytics;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_breed_details);
+
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         ButterKnife.bind(this);
 
@@ -533,6 +539,10 @@ public class BreedDetailsActivity extends AppCompatActivity {
         contentValues.put(BreedsEntry.COLUMN_WIKIPEDIA, wikipedia_url);
 
         getContentResolver().insert(BreedsEntry.CONTENT_URI, contentValues);
+
+        // [START user_property]
+        mFirebaseAnalytics.setUserProperty("favorite_breed", breedName);
+        // [END user_property]
     }
 
     public void refresh(){
