@@ -13,8 +13,10 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.Toast;
 
-import com.example.android.katsapp.model.Breeds;
+import com.google.android.gms.ads.AdRequest;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 public class MainActivity extends AppCompatActivity implements BreedsFragment.OnBreedClickListener {
 
@@ -22,16 +24,21 @@ public class MainActivity extends AppCompatActivity implements BreedsFragment.On
     private Toolbar toolbar;
     private ActionBarDrawerToggle drawerToggle;
 
-    private Breeds[] mBreeds = null;
-
     private static final String LOG_TAG = BreedsFragment.class.getSimpleName();
 
     FragmentManager fragmentManager = getSupportFragmentManager();
+
+    AdRequest request;
+
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -54,12 +61,12 @@ public class MainActivity extends AppCompatActivity implements BreedsFragment.On
 
         setTitle(R.string.cat_breeds);
 
-        // test Device ID 8D03E396134C87A506F0629CE91BAF68
-        /*
+        // Add Test Device ID
         request = new AdRequest.Builder()
                 .addTestDevice("8D03E396134C87A506F0629CE91BAF68")
                 .build();
-                */
+
+        Toast.makeText(this, "isTestDevice: " + request.isTestDevice(this), Toast.LENGTH_SHORT).show();
 
 
         // Load BreedsFragment by default
@@ -166,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements BreedsFragment.On
     }
 
     @Override
-    public void onBreedClick(int position, String breedsQueryResponse, String breedId, String loadingFromFav) {
+    public void onBreedClick(int position, String breedsQueryResponse, String breedId, String loadingFromFav, String breedName) {
 
         Intent intent = new Intent(this, BreedDetailsActivity.class);
         intent.putExtra("breed_id", breedId);
@@ -175,6 +182,12 @@ public class MainActivity extends AppCompatActivity implements BreedsFragment.On
         intent.putExtra("breedsQueryResponse", breedsQueryResponse);
         startActivity(intent);
 
-
+        // [START custom_event]
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, breedId);
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, breedName);
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "image");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+        // [END custom_event]
     }
 }
