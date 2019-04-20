@@ -92,12 +92,13 @@ public class BreedsAdapter extends RecyclerView.Adapter<BreedsAdapter.BreedsAdap
             int clickedPosition = getAdapterPosition();
 
             String breed_id_to_pass = mBreeds[clickedPosition].getId();
+            String breed_name_to_pass = mBreeds[clickedPosition].getName();
 
-            mBreedClickListener.onBreedClicked(clickedPosition, breed_id_to_pass);
+            mBreedClickListener.onBreedClicked(clickedPosition, breed_id_to_pass, breed_name_to_pass);
         }
     }
 
     public interface BreedAdapterClickListener{
-        void onBreedClicked(int position, String breedId);
+        void onBreedClicked(int position, String breedId, String breedName);
     }
 }
