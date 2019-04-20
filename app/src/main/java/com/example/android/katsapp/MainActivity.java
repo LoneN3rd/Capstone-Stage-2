@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.android.katsapp.model.Breeds;
 import com.google.android.gms.ads.AdListener;
@@ -34,6 +35,8 @@ public class MainActivity extends AppCompatActivity implements BreedsFragment.On
     FragmentManager fragmentManager = getSupportFragmentManager();
 
     private InterstitialAd mInterstitialAd;
+
+    AdRequest request;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,11 +82,10 @@ public class MainActivity extends AppCompatActivity implements BreedsFragment.On
         });
 
         // test Device ID 8D03E396134C87A506F0629CE91BAF68
-        AdRequest request = new AdRequest.Builder()
+        request = new AdRequest.Builder()
                 .addTestDevice("8D03E396134C87A506F0629CE91BAF68")
                 .build();
 
-        request.isTestDevice(this);
 
         // Load BreedsFragment by default
         BreedsFragment breedsFragment = new BreedsFragment();
@@ -94,6 +96,16 @@ public class MainActivity extends AppCompatActivity implements BreedsFragment.On
 
     }
 
+    public void checkDevice(){
+        if (request.isTestDevice(this)){
+
+            Toast.makeText(this, "isTestDevice", Toast.LENGTH_LONG).show();
+
+        } else {
+            Toast.makeText(this, "isNotTestDevice", Toast.LENGTH_LONG).show();
+        }
+    }
+
     public void showAd(){
 
         if (mInterstitialAd.isLoaded()) {
@@ -101,6 +113,8 @@ public class MainActivity extends AppCompatActivity implements BreedsFragment.On
         } else {
             Log.d(LOG_TAG, "The interstitial wasn't loaded yet.");
         }
+
+        // Toast.makeText(this, "isTestDevice: " + request.isTestDevice(this), Toast.LENGTH_LONG).show();
     }
 
     @Override
