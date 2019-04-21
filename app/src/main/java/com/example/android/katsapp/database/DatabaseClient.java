@@ -7,7 +7,7 @@ import android.content.Context;
 public class DatabaseClient {
 
     private static DatabaseClient mInstance;
-    private static final String DATABASE_NAME = "MyCatsDb";
+    private static final String DATABASE_NAME = "MyCatsDb.db";
 
     private BreedsDatabase breedsDatabase;
 
