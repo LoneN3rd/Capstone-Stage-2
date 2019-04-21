@@ -68,18 +68,18 @@ public class FavoriteBreeds {
     private String wikipediaUrl;
 
     @Ignore
-    public FavoriteBreeds(@NonNull String id){
-        this.breed_id = id;
+    public FavoriteBreeds(@NonNull String breed_id){
+        this.breed_id = breed_id;
     }
 
-    public FavoriteBreeds(@NonNull String id, String breedName, String origin, String countryCode,
+    public FavoriteBreeds(@NonNull String breed_id, String breedName, String origin, String countryCode,
                           String hypoallergenic, String description, String temperament,
                           String affection, String adaptability, String childFriendly,
                           String dogFriendly, String energyLevel, String grooming, String healthIssues,
                           String intelligence, String sheddingLevel, String socialNeeds,
                           String strangerFriendly, String wikipediaUrl){
 
-        this.breed_id = id;
+        this.breed_id = breed_id;
         this.breedName = breedName;
         this.origin = origin;
         this.countryCode = countryCode;
