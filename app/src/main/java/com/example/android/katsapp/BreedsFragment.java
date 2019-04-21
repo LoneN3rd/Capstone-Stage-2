@@ -35,7 +35,7 @@ import java.util.concurrent.ExecutionException;
 public class BreedsFragment extends Fragment implements BreedsAdapter.BreedAdapterClickListener {
 
     private static RecyclerView mRecyclerView;
-    static Breeds[] cat_breeds;
+    static Breeds[] cat_breeds = null;
     GetBreedsTask getBreedsTask;
     OnBreedClickListener mCallback;
     public static String breedsQueryResponse;
@@ -95,7 +95,8 @@ public class BreedsFragment extends Fragment implements BreedsAdapter.BreedAdapt
         if (loadFav) {
 
             loadingFromFav = "yeees";
-            cat_breeds = getBreedNames();
+
+            // cat_breeds = getBreedNames();
 
         } else {
 
@@ -119,14 +120,14 @@ public class BreedsFragment extends Fragment implements BreedsAdapter.BreedAdapt
             }
 
             loadingFromFav = "nooo";
-        }
 
-        if (cat_breeds != null) {
+            if (cat_breeds != null) {
 
-        BreedsAdapter breedsAdapter = new BreedsAdapter(this, getActivity());
-        breedsAdapter.setBreeds(cat_breeds);
+                BreedsAdapter breedsAdapter = new BreedsAdapter(this, getActivity());
+                breedsAdapter.setBreeds(cat_breeds);
 
-        mRecyclerView.setAdapter(breedsAdapter);
+                mRecyclerView.setAdapter(breedsAdapter);
+            }
         }
 
         // Inflate the layout for this fragment
