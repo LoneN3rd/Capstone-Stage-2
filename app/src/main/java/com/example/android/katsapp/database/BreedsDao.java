@@ -11,7 +11,7 @@ import java.util.List;
 @Dao
 public interface BreedsDao {
 
-    @Query("SELECT * FROM breeds")
+    @Query("SELECT * FROM breeds ORDER BY breed_name ASC")
     List<FavoriteBreeds> getAll();
 
     @Query("SELECT * FROM breeds WHERE breed_id = :id")
