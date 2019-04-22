@@ -12,6 +12,7 @@
     <string name="category_image">Category Image</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+    <string name="no_data">You don\'t have any favorites yet…</string>
 
     <string name="title_activity_breed_details">BreedDetailsActivity</string>
     <string name="action_settings">Settings</string>
