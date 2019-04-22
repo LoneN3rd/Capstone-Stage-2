@@ -23,7 +23,7 @@ public class FavoriteBreeds {
     private String countryCode;
 
     @ColumnInfo(name = "hypoallergenic")
-    private String hypoallergenic;
+    private int hypoallergenic;
 
     @ColumnInfo(name = "description")
     private String description;
@@ -32,37 +32,37 @@ public class FavoriteBreeds {
     private String temperament;
 
     @ColumnInfo(name = "affection")
-    private String affection;
+    private int affection;
 
     @ColumnInfo(name = "adaptability")
-    private String adaptability;
+    private int adaptability;
 
     @ColumnInfo(name = "child_friendly")
-    private String childFriendly;
+    private int childFriendly;
 
     @ColumnInfo(name = "dog_friendly")
-    private String dogFriendly;
+    private int dogFriendly;
 
     @ColumnInfo(name = "energy_level")
-    private String energyLevel;
+    private int energyLevel;
 
     @ColumnInfo(name = "grooming")
-    private String grooming;
+    private int grooming;
 
     @ColumnInfo(name = "health_issues")
-    private String healthIssues;
+    private int healthIssues;
 
     @ColumnInfo(name = "intelligence")
-    private String intelligence;
+    private int intelligence;
 
     @ColumnInfo(name = "shedding_level")
-    private String sheddingLevel;
+    private int sheddingLevel;
 
     @ColumnInfo(name = "social_needs")
-    private String socialNeeds;
+    private int socialNeeds;
 
     @ColumnInfo(name = "stranger_friendly")
-    private String strangerFriendly;
+    private int strangerFriendly;
 
     @ColumnInfo(name = "wikipedia_url")
     private String wikipediaUrl;
@@ -73,11 +73,11 @@ public class FavoriteBreeds {
     }
 
     public FavoriteBreeds(@NonNull String breed_id, String breedName, String origin, String countryCode,
-                          String hypoallergenic, String description, String temperament,
-                          String affection, String adaptability, String childFriendly,
-                          String dogFriendly, String energyLevel, String grooming, String healthIssues,
-                          String intelligence, String sheddingLevel, String socialNeeds,
-                          String strangerFriendly, String wikipediaUrl){
+                          int hypoallergenic, String description, String temperament,
+                          int affection, int adaptability, int childFriendly,
+                          int dogFriendly, int energyLevel, int grooming, int healthIssues,
+                          int intelligence, int sheddingLevel, int socialNeeds,
+                          int strangerFriendly, String wikipediaUrl){
 
         this.breed_id = breed_id;
         this.breedName = breedName;
@@ -134,11 +134,11 @@ public class FavoriteBreeds {
         this.countryCode = countryCode;
     }
 
-    public String getHypoallergenic() {
+    public int getHypoallergenic() {
         return hypoallergenic;
     }
 
-    public void setHypoallergenic(String hypoallergenic) {
+    public void setHypoallergenic(int hypoallergenic) {
         this.hypoallergenic = hypoallergenic;
     }
 
@@ -158,91 +158,91 @@ public class FavoriteBreeds {
         this.temperament = temperament;
     }
 
-    public String getAffection() {
+    public int getAffection() {
         return affection;
     }
 
-    public void setAffection(String affection) {
+    public void setAffection(int affection) {
         this.affection = affection;
     }
 
-    public String getAdaptability() {
+    public int getAdaptability() {
         return adaptability;
     }
 
-    public void setAdaptability(String adaptability) {
+    public void setAdaptability(int adaptability) {
         this.adaptability = adaptability;
     }
 
-    public String getChildFriendly() {
+    public int getChildFriendly() {
         return childFriendly;
     }
 
-    public void setChildFriendly(String childFriendly) {
+    public void setChildFriendly(int childFriendly) {
         this.childFriendly = childFriendly;
     }
 
-    public String getDogFriendly() {
+    public int getDogFriendly() {
         return dogFriendly;
     }
 
-    public void setDogFriendly(String dogFriendly) {
+    public void setDogFriendly(int dogFriendly) {
         this.dogFriendly = dogFriendly;
     }
 
-    public String getEnergyLevel() {
+    public int getEnergyLevel() {
         return energyLevel;
     }
 
-    public void setEnergyLevel(String energyLevel) {
+    public void setEnergyLevel(int energyLevel) {
         this.energyLevel = energyLevel;
     }
 
-    public String getGrooming() {
+    public int getGrooming() {
         return grooming;
     }
 
-    public void setGrooming(String grooming) {
+    public void setGrooming(int grooming) {
         this.grooming = grooming;
     }
 
-    public String getHealthIssues() {
+    public int getHealthIssues() {
         return healthIssues;
     }
 
-    public void setHealthIssues(String healthIssues) {
+    public void setHealthIssues(int healthIssues) {
         this.healthIssues = healthIssues;
     }
 
-    public String getIntelligence() {
+    public int getIntelligence() {
         return intelligence;
     }
 
-    public void setIntelligence(String intelligence) {
+    public void setIntelligence(int intelligence) {
         this.intelligence = intelligence;
     }
 
-    public String getSheddingLevel() {
+    public int getSheddingLevel() {
         return sheddingLevel;
     }
 
-    public void setSheddingLevel(String sheddingLevel) {
+    public void setSheddingLevel(int sheddingLevel) {
         this.sheddingLevel = sheddingLevel;
     }
 
-    public String getSocialNeeds() {
+    public int getSocialNeeds() {
         return socialNeeds;
     }
 
-    public void setSocialNeeds(String socialNeeds) {
+    public void setSocialNeeds(int socialNeeds) {
         this.socialNeeds = socialNeeds;
     }
 
-    public String getStrangerFriendly() {
+    public int getStrangerFriendly() {
         return strangerFriendly;
     }
 
-    public void setStrangerFriendly(String strangerFriendly) {
+    public void setStrangerFriendly(int strangerFriendly) {
         this.strangerFriendly = strangerFriendly;
     }
 
