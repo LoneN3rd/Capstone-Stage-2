@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "831387363895",
+    "firebase_url": "https://cats-app-a9dea.firebaseio.com",
+    "project_id": "cats-app-a9dea",
+    "storage_bucket": "cats-app-a9dea.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:831387363895:android:b8b8abc4de79a75d",
+        "android_client_info": {
+          "package_name": "com.example.android.katsapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "831387363895-mviq8h651kfd2icqbc7979kst1je0ahc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBMBEt9Pkeem6kqG8qQMbRGzCBvoFnxKkc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "831387363895-mviq8h651kfd2icqbc7979kst1je0ahc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
