@@ -3,8 +3,6 @@ package com.example.android.katsapp;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -20,23 +18,27 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.android.katsapp.Adapters.BreedsAdapter;
+import com.example.android.katsapp.Adapters.FavoritesAdapter;
+import com.example.android.katsapp.database.DatabaseClient;
+import com.example.android.katsapp.database.FavoriteBreeds;
 import com.example.android.katsapp.model.Breeds;
-import com.example.android.katsapp.provider.BreedsContract.BreedsEntry;
 import com.example.android.katsapp.utils.JsonUtils;
 import com.example.android.katsapp.utils.UrlUtils;
 
 import java.net.URL;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class BreedsFragment extends Fragment implements BreedsAdapter.BreedAdapterClickListener {
+public class BreedsFragment extends Fragment implements BreedsAdapter.BreedAdapterClickListener, FavoritesAdapter.FavAdapterClickListener {
 
     private static RecyclerView mRecyclerView;
     static Breeds[] cat_breeds = null;
     GetBreedsTask getBreedsTask;
+    GetFavoritesTask getFavoritesTask;
     OnBreedClickListener mCallback;
     public static String breedsQueryResponse;
     private static final String LOG_TAG = BreedsFragment.class.getSimpleName();
@@ -45,6 +47,8 @@ public class BreedsFragment extends Fragment implements BreedsAdapter.BreedAdapt
     private static ProgressBar progressBar;
     private static Button buttonRetry;
     private static TextView tvError;
+
+    private static List<FavoriteBreeds> breedsList;
 
     public void loadFromFav(){
         this.loadFav = true;
@@ -96,7 +100,29 @@ public class BreedsFragment extends Fragment implements BreedsAdapter.BreedAdapt
 
             loadingFromFav = "yeees";
 
-            // cat_breeds = getBreedNames();
+            getFavoritesTask = new GetFavoritesTask(getContext());
+            getFavoritesTask.execute();
+
+            try {
+                breedsList = getFavoritesTask.get();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            if (breedsList.size() != 0){
+
+                FavoritesAdapter favoritesAdapter = new FavoritesAdapter(this, getActivity());
+                favoritesAdapter.setBreeds(breedsList);
+
+                mRecyclerView.setAdapter(favoritesAdapter);
+
+                Log.i(LOG_TAG, "some data");
+                Log.i(LOG_TAG, "the data = " + breedsList);
+            } else {
+                Log.i(LOG_TAG, "no data");
+            }
 
         } else {
 
@@ -108,7 +134,6 @@ public class BreedsFragment extends Fragment implements BreedsAdapter.BreedAdapt
             }
 
             getBreedsTask = new GetBreedsTask(getContext());
-
             getBreedsTask.execute();
 
             try {
@@ -166,38 +191,46 @@ public class BreedsFragment extends Fragment implements BreedsAdapter.BreedAdapt
         void onBreedClick(int position, String breedsQueryResponse, String breedId, String loadingFromFav, String breedName);
     }
 
-    private Breeds[] getBreedNames(){
+    @SuppressLint("StaticFieldLeak")
+    private static class GetFavoritesTask extends AsyncTask<String, Void, List<FavoriteBreeds>> {
 
-        Uri uri = BreedsEntry.CONTENT_URI;
-        Breeds[] theResult = new Breeds[0];
+        static Context mContext;
 
-        Cursor mCursor = getContext().getContentResolver()
-                .query(uri, null, null, null, "breed_name ASC");
-
-        if (mCursor != null) {
-            mCursor.moveToFirst();
-
-            theResult = new Breeds[mCursor.getCount()];
-
-            for (int i=0; i < mCursor.getCount(); i++){
-                Breeds breeds = new Breeds();
-
-                breeds.setName(mCursor.getString(mCursor.getColumnIndex(BreedsEntry.COLUMN_BREED_NAME)));
-                breeds.setId(mCursor.getString(mCursor.getColumnIndex(BreedsEntry.COLUMN_ID)));
-                breeds.setCountryCode(mCursor.getString(mCursor.getColumnIndex(BreedsEntry.COLUMN_COUNTRY_CODE)));
-
-                theResult[i] = breeds;
-
-                mCursor.moveToNext();
-            }
-
-            cat_breeds = theResult;
-
-            mCursor.close();
+        GetFavoritesTask(Context context){
+            mContext = context;
         }
 
-        return theResult;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
 
+            mRecyclerView.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected List<FavoriteBreeds> doInBackground(String... strings) {
+            return DatabaseClient
+                    .getInstance(mContext)
+                    .getAppDatabase()
+                    .breedsDao()
+                    .getAll();
+        }
+
+        @Override
+        protected void onPostExecute(List<FavoriteBreeds> favoriteBreeds) {
+            new GetFavoritesTask(mContext).cancel(true);
+
+            if (favoriteBreeds != null){
+                breedsList = favoriteBreeds;
+
+                mRecyclerView.setVisibility(View.VISIBLE);
+                hideViews();
+            } else {
+                Log.d(LOG_TAG, "Problems with the favorites adapter");
+            }
+
+        }
     }
 
     @SuppressLint("StaticFieldLeak")
