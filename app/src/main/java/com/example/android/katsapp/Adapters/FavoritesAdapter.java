@@ -4,6 +4,7 @@ package com.example.android.katsapp.Adapters;
 import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,10 +35,6 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
         this.mActivity = activity;
     }
 
-    public void setBreeds(List<FavoriteBreeds> mBreeds){
-        this.mBreeds = mBreeds;
-    }
-
     @NonNull
     @Override
     public FavoritesAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
@@ -57,7 +54,6 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
         String country_code_image_url = "https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.1/flags/1x1/" + country_code + ".svg";
 
         String breed_name = favoriteBreeds.getBreedName();
-        String breed_id = favoriteBreeds.getBreed_id();
 
         breedName.setText(breed_name);
 
@@ -69,6 +65,9 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
 
     @Override
     public int getItemCount() {
+        if (mBreeds == null) {
+            return 0;
+        }
         return mBreeds.size();
     }
 
@@ -87,11 +86,23 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
         public void onClick(View view) {
             int clickedPosition = getAdapterPosition();
 
-            String breed_id_to_pass = favoriteBreeds.getBreed_id();
-            String breed_name_to_pass = favoriteBreeds.getBreedName();
+            String breed_id_to_pass = mBreeds.get(getAdapterPosition()).getBreed_id();
+            String breed_name_to_pass = mBreeds.get(getAdapterPosition()).getBreedName();
+
+            Log.i(LOG_TAG, "breed_id_to_pass:=" + breed_id_to_pass);
+            Log.i(LOG_TAG, "breed_name_to_pass:=" + breed_name_to_pass);
 
             favClickListener.onBreedClicked(clickedPosition, breed_id_to_pass, breed_name_to_pass);
         }
+    }
+
+    /**
+     * When data changes, this method updates the list of favoriteBreeds
+     * and notifies the adapter to use the new values on it
+     */
+    public void setBreeds(List<FavoriteBreeds> favoriteBreeds) {
+        mBreeds = favoriteBreeds;
+        notifyDataSetChanged();
     }
 
     public interface FavAdapterClickListener{
