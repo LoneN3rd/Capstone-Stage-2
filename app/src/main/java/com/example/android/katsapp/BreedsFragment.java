@@ -23,7 +23,6 @@ import android.widget.TextView;
 import com.example.android.katsapp.Adapters.BreedsAdapter;
 import com.example.android.katsapp.Adapters.FavoritesAdapter;
 import com.example.android.katsapp.ViewModels.FavoritesViewModel;
-import com.example.android.katsapp.database.BreedsDatabase;
 import com.example.android.katsapp.database.FavoriteBreeds;
 import com.example.android.katsapp.model.Breeds;
 import com.example.android.katsapp.utils.JsonUtils;
@@ -52,10 +51,6 @@ public class BreedsFragment extends Fragment implements BreedsAdapter.BreedAdapt
     private static Button buttonRetry;
     private static TextView tvError;
 
-    private static List<FavoriteBreeds> breedsList;
-
-    private BreedsDatabase mDb;
-
     public void loadFromFav(){
         this.loadFav = true;
     }
@@ -63,8 +58,6 @@ public class BreedsFragment extends Fragment implements BreedsAdapter.BreedAdapt
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
-        mDb = BreedsDatabase.getInstance(getContext());
 
         // attach callback to fragment
         try {
@@ -109,7 +102,6 @@ public class BreedsFragment extends Fragment implements BreedsAdapter.BreedAdapt
             loadingFromFav = "yeees";
 
             favoritesAdapter = new FavoritesAdapter(this, getActivity());
-            // favoritesAdapter.setBreeds(breedsList);
             mRecyclerView.setAdapter(favoritesAdapter);
 
             setupViewModel();
