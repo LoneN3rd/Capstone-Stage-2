@@ -9,8 +9,10 @@ import android.support.annotation.NonNull;
 @Entity(tableName = "breeds") //define the table name here
 public class FavoriteBreeds {
 
-    @NonNull
-    @PrimaryKey(autoGenerate = false)
+    @PrimaryKey(autoGenerate = true)
+    private int _id;
+
+    @ColumnInfo(name = "breed_id")
     private String breed_id;
 
     @ColumnInfo(name = "breed_name")
@@ -100,13 +102,19 @@ public class FavoriteBreeds {
         this.wikipediaUrl = wikipediaUrl;
 
     }
+    public int get_id() {
+        return _id;
+    }
 
-    @NonNull
+    public void set_id(int _id) {
+        this._id = _id;
+    }
+
     public String getBreed_id() {
         return breed_id;
     }
 
-    public void setBreed_id(@NonNull String breed_id) {
+    public void setBreed_id(String breed_id) {
         this.breed_id = breed_id;
     }
 
