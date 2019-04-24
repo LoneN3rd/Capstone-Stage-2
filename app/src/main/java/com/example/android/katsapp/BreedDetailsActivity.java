@@ -26,12 +26,14 @@ import android.widget.TextView;
 import com.ahmadrosid.svgloader.SvgLoader;
 import com.example.android.katsapp.ViewModels.SingleFavViewModel;
 import com.example.android.katsapp.ViewModels.SingleFavViewModelFactory;
+import com.example.android.katsapp.database.AppExecutors;
 import com.example.android.katsapp.database.BreedsDatabase;
 import com.example.android.katsapp.database.FavoriteBreeds;
 import com.example.android.katsapp.model.Breeds;
 import com.example.android.katsapp.model.Images;
 import com.example.android.katsapp.utils.JsonUtils;
 import com.example.android.katsapp.utils.UrlUtils;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -58,7 +60,8 @@ public class BreedDetailsActivity extends AppCompatActivity {
     private static final String LOG_TAG = BreedsFragment.class.getSimpleName();
 
     private BreedsDatabase mDb;
-    private FavoriteBreeds favoriteBreeds;
+
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @BindView(R.id.origin)
     TextView origin;
@@ -202,14 +205,17 @@ public class BreedDetailsActivity extends AppCompatActivity {
             }
         });
 
+        mDb = BreedsDatabase.getInstance(getApplicationContext());
+
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
         buttonRetry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 retry();
             }
         });
-
-        mDb = BreedsDatabase.getInstance(getApplicationContext());
 
         Intent intent = getIntent();
 
@@ -224,6 +230,9 @@ public class BreedDetailsActivity extends AppCompatActivity {
 
                 breedId = breed_id;
 
+                fab.setVisibility(View.GONE);
+                fab_remove.setVisibility(View.GONE);
+
                 //Declare a AddEntryViewModelFactory using mDb and mEntryId
                 SingleFavViewModelFactory factory = new SingleFavViewModelFactory(mDb, breedId);
 
@@ -235,30 +244,9 @@ public class BreedDetailsActivity extends AppCompatActivity {
                     @Override
                     public void onChanged(@Nullable FavoriteBreeds favoriteBreed) {
                         viewModel.getFavorite().removeObserver(this);
-                        // populateUI(favoriteBreed);
-                        favoriteBreeds = favoriteBreed;
+                        populateFavsUI(favoriteBreed);
                     }
                 });
-
-                breedName = favoriteBreeds.getBreedName();
-
-                hypoallergenic = favoriteBreeds.getHypoallergenic();
-                description = favoriteBreeds.getDescription();
-                temperament = favoriteBreeds.getTemperament();
-                breedOrigin = favoriteBreeds.getOrigin();
-                country_code = favoriteBreeds.getCountryCode();
-                affection_level = favoriteBreeds.getAffection();
-                adaptability = favoriteBreeds.getAdaptability();
-                child_friendly = favoriteBreeds.getChildFriendly();
-                dog_friendly = favoriteBreeds.getDogFriendly();
-                energy_level = favoriteBreeds.getEnergyLevel();
-                grooming = favoriteBreeds.getGrooming();
-                health_issues = favoriteBreeds.getHealthIssues();
-                intelligence = favoriteBreeds.getIntelligence();
-                shedding_level = favoriteBreeds.getSheddingLevel();
-                social_needs = favoriteBreeds.getSocialNeeds();
-                stranger_friendly = favoriteBreeds.getStrangerFriendly();
-                wikipedia_url = favoriteBreeds.getWikipediaUrl();
 
             } else {
 
@@ -295,19 +283,46 @@ public class BreedDetailsActivity extends AppCompatActivity {
 
                 breedId = breedDetails[clickedBreedPosition].getId();
 
+                updateUi();
+
+                String the_country_code = country_code.toLowerCase(Locale.ROOT);
+                country_code_image_url = "https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.1/flags/1x1/" + the_country_code + ".svg";
+
+                setTitle(breedName);
+
+                origin.setText(breedOrigin);
+
+                if (hypoallergenic != 0){
+                    tv_hypoallergenic.setText(R.string.hypoallergenic);
+                } else {
+                    tv_hypoallergenic.setVisibility(View.GONE);
+                }
+
+                tv_description.setText(description);
+                tv_temperament.setText(temperament);
+                rb_affection.setRating(affection_level);
+                rb_adaptability.setRating(adaptability);
+                rb_child_friendly.setRating(child_friendly);
+                rb_dog_friendly.setRating(dog_friendly);
+                rb_energy_level.setRating(energy_level);
+                rb_grooming.setRating(grooming);
+                rb_health_issues.setRating(health_issues);
+                rb_intelligence.setRating(intelligence);
+                rb_shedding_level.setRating(shedding_level);
+                rb_social_needs.setRating(social_needs);
+                rb_stranger_friendly.setRating(stranger_friendly);
+                tv_wikipedia.setText(wikipedia_url);
+
+                if (CheckNetwork.isInternetAvailable(BreedDetailsActivity.this)) {
+                    SvgLoader.pluck()
+                            .with(this)
+                            .load(country_code_image_url, country_code_image);
+                }
             }
-
-            String the_country_code = country_code.toLowerCase(Locale.ROOT);
-            country_code_image_url = "https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.1/flags/1x1/" + the_country_code + ".svg";
-
-            setTitle(breedName);
 
             String breedImage = "";
 
             if (CheckNetwork.isInternetAvailable(BreedDetailsActivity.this)) {
-                SvgLoader.pluck()
-                        .with(this)
-                        .load(country_code_image_url, country_code_image);
 
                 getBreedImageTask = new GetBreedImageTask();
 
@@ -334,32 +349,7 @@ public class BreedDetailsActivity extends AppCompatActivity {
                     .error(R.drawable.abys_2)
                     .into(iv_breed_image);
 
-            origin.setText(breedOrigin);
-
-            if (hypoallergenic != 0){
-                tv_hypoallergenic.setText(R.string.hypoallergenic);
-            } else {
-                tv_hypoallergenic.setVisibility(View.GONE);
-            }
-
-            tv_description.setText(description);
-            tv_temperament.setText(temperament);
-            rb_affection.setRating(affection_level);
-            rb_adaptability.setRating(adaptability);
-            rb_child_friendly.setRating(child_friendly);
-            rb_dog_friendly.setRating(dog_friendly);
-            rb_energy_level.setRating(energy_level);
-            rb_grooming.setRating(grooming);
-            rb_health_issues.setRating(health_issues);
-            rb_intelligence.setRating(intelligence);
-            rb_shedding_level.setRating(shedding_level);
-            rb_social_needs.setRating(social_needs);
-            rb_stranger_friendly.setRating(stranger_friendly);
-            tv_wikipedia.setText(wikipedia_url);
-
         }
-
-        updateUi();
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -367,13 +357,11 @@ public class BreedDetailsActivity extends AppCompatActivity {
             // Save breed to DB
             saveBreedData();
 
-            updateUi();
-
             Snackbar.make(view, breedName + " "+ getString(R.string.marked_favorite), Snackbar.LENGTH_LONG)
                     .setAction(R.string.action, null).show();
 
             // send a broadcast to update the appwidget
-            // CatsWidget.sendRefreshBroadcast(BreedDetailsActivity.this);
+            CatsWidget.sendRefreshBroadcast(BreedDetailsActivity.this);
             }
         });
 
@@ -386,18 +374,55 @@ public class BreedDetailsActivity extends AppCompatActivity {
             Snackbar.make(view, breedName + " " + getString(R.string.removed_favorite), Snackbar.LENGTH_LONG)
                         .setAction(R.string.action, null).show();
 
-            updateUi();
-
             // send a broadcast to update the appwidget
-            // CatsWidget.sendRefreshBroadcast(BreedDetailsActivity.this);
+            CatsWidget.sendRefreshBroadcast(BreedDetailsActivity.this);
             }
         });
 
     }
 
-    private void populateUI(FavoriteBreeds favoriteBreed) {
-        if (favoriteBreed == null) {
+    @SuppressLint("RestrictedApi")
+    private void populateFavsUI(FavoriteBreeds favBreedDetails) {
+        if (favBreedDetails == null) {
             return;
+        }
+
+        hypoallergenic = favBreedDetails.getHypoallergenic();
+
+        country_code = favBreedDetails.getCountryCode();
+
+        String the_country_code = country_code.toLowerCase(Locale.ROOT);
+        country_code_image_url = "https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.1/flags/1x1/" + the_country_code + ".svg";
+
+        setTitle(favBreedDetails.getBreedName());
+
+        origin.setText(favBreedDetails.getOrigin());
+
+        if (hypoallergenic != 0){
+            tv_hypoallergenic.setText(R.string.hypoallergenic);
+        } else {
+            tv_hypoallergenic.setVisibility(View.GONE);
+        }
+
+        tv_description.setText(favBreedDetails.getDescription());
+        tv_temperament.setText(favBreedDetails.getTemperament());
+        rb_affection.setRating(favBreedDetails.getAffection());
+        rb_adaptability.setRating(favBreedDetails.getAdaptability());
+        rb_child_friendly.setRating(favBreedDetails.getChildFriendly());
+        rb_dog_friendly.setRating(favBreedDetails.getDogFriendly());
+        rb_energy_level.setRating(favBreedDetails.getEnergyLevel());
+        rb_grooming.setRating(favBreedDetails.getGrooming());
+        rb_health_issues.setRating(favBreedDetails.getHealthIssues());
+        rb_intelligence.setRating(favBreedDetails.getIntelligence());
+        rb_shedding_level.setRating(favBreedDetails.getSheddingLevel());
+        rb_social_needs.setRating(favBreedDetails.getSocialNeeds());
+        rb_stranger_friendly.setRating(favBreedDetails.getStrangerFriendly());
+        tv_wikipedia.setText(favBreedDetails.getWikipediaUrl());
+
+        if (CheckNetwork.isInternetAvailable(BreedDetailsActivity.this)) {
+            SvgLoader.pluck()
+                    .with(this)
+                    .load(country_code_image_url, country_code_image);
         }
     }
 
@@ -481,79 +506,45 @@ public class BreedDetailsActivity extends AppCompatActivity {
     }
 
     // delete breed
-    @SuppressLint("StaticFieldLeak")
     private void deleteBreed() {
+        final FavoriteBreeds favoriteBreed = new FavoriteBreeds(breedId);
+        favoriteBreed.setBreed_id(breedId);
 
-
-        class RemoveFavorite extends AsyncTask<Void, Void, Void> {
-
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
-            protected Void doInBackground(Void... voids) {
-
-                FavoriteBreeds favoriteBreeds = new FavoriteBreeds(breedId);
-                favoriteBreeds.setBreed_id(breedId);
-
-                /*
-                DatabaseClient.getInstance(getApplicationContext()).getAppDatabase()
-                        .breedsDao()
-                        .delete(breedId);
-                 */
-
-                return null;
+            public void run() {
+                mDb.breedsDao().delete(breedId);
             }
-        }
+        });
 
-        RemoveFavorite removeFavorite = new RemoveFavorite();
-        removeFavorite.execute();
-
+        fab.setVisibility(View.VISIBLE);
+        fab_remove.setVisibility(View.GONE);
     }
 
     private void saveBreedData(){
 
-        @SuppressLint("StaticFieldLeak")
-        class SaveBreedData extends AsyncTask<Void, Void, Void> {
+        final FavoriteBreeds favoriteBreed = new FavoriteBreeds(breedId, breedName, breedOrigin,
+                country_code, hypoallergenic, description, temperament, affection_level,
+                adaptability, child_friendly, dog_friendly, energy_level, grooming,
+                health_issues, intelligence, shedding_level, social_needs, stranger_friendly,
+                wikipedia_url);
 
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
-            protected Void doInBackground(Void... voids) {
-
-                FavoriteBreeds favoriteBreeds = new FavoriteBreeds(breedId, breedName, breedOrigin,
-                        country_code, hypoallergenic, description, temperament, affection_level,
-                        adaptability, child_friendly, dog_friendly, energy_level, grooming,
-                        health_issues, intelligence, shedding_level, social_needs, stranger_friendly,
-                        wikipedia_url);
-
-                favoriteBreeds.setBreed_id(breedId);
-                favoriteBreeds.setBreedName(breedName);
-                favoriteBreeds.setOrigin(breedOrigin);
-                favoriteBreeds.setCountryCode(country_code);
-                favoriteBreeds.setHypoallergenic(hypoallergenic);
-                favoriteBreeds.setDescription(description);
-                favoriteBreeds.setTemperament(temperament);
-                favoriteBreeds.setAffection(affection_level);
-                favoriteBreeds.setAdaptability(adaptability);
-                favoriteBreeds.setChildFriendly(child_friendly);
-                favoriteBreeds.setDogFriendly(dog_friendly);
-                favoriteBreeds.setEnergyLevel(energy_level);
-                favoriteBreeds.setGrooming(grooming);
-                favoriteBreeds.setHealthIssues(health_issues);
-                favoriteBreeds.setIntelligence(intelligence);
-                favoriteBreeds.setSheddingLevel(shedding_level);
-                favoriteBreeds.setSocialNeeds(social_needs);
-                favoriteBreeds.setStrangerFriendly(stranger_friendly);
-                favoriteBreeds.setWikipediaUrl(wikipedia_url);
-
-                /*
-                BreedsDatabase.getInstance(getApplicationContext()).getAppDatabase()
-                        .breedsDao()
-                        .insertBreed(favoriteBreeds);
-                 */
-
-                return null;
+            public void run() {
+                mDb.breedsDao().insertBreed(favoriteBreed);
             }
-        }
+        });
 
-        SaveBreedData saveFavorite = new SaveBreedData();
-        saveFavorite.execute();
+        fab.setVisibility(View.GONE);
+        fab_remove.setVisibility(View.VISIBLE);
+
+        // [START custom_event]
+        Bundle params = new Bundle();
+        params.putString("breed_name", breedName);
+        params.putString("breed_id", breedId);
+        mFirebaseAnalytics.logEvent("mark_favorite", params);
+        // [END custom_event]
     }
 
     public void refresh(){
