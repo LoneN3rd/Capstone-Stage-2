@@ -4,13 +4,12 @@ package com.example.android.katsapp;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Binder;
 import android.widget.AdapterView;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
-import com.example.android.katsapp.provider.BreedsContract.BreedsEntry;
+import com.example.android.katsapp.database.BreedsDatabase;
 
 public class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
@@ -36,9 +35,18 @@ public class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
 
         final long identityToken = Binder.clearCallingIdentity();
 
+        /*
         Uri uri = BreedsEntry.CONTENT_URI;
 
-        mCursor = mContext.getContentResolver().query(uri, null, null, null, "_id DESC");
+        mCursor = mContext.getContentResolver().query(uri, null, null,
+                null, "_id DESC");
+         */
+
+        BreedsDatabase mDb = BreedsDatabase.getInstance(mContext);
+
+        String query = "SELECT * FROM breeds ORDER BY _id DESC LIMIT 1";
+
+        mCursor = mDb.query(query, null);
 
         Binder.restoreCallingIdentity(identityToken);
     }
